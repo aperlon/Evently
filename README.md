@@ -1,8 +1,30 @@
 # Evently - Event Impact Analyzer
 
+> **🚀 Quick Start:** `./start.sh` - Ve a [QUICKSTART.md](QUICKSTART.md) para instrucciones en español
+
 ## 🎯 Descripción del Proyecto
 
 **Evently** es un prototipo interactivo que permite analizar el impacto económico y turístico de grandes eventos urbanos (deporte, cultura, música, ferias internacionales) en distintas ciudades del mundo.
+
+## 📊 Estado de los Datos
+
+**Versión Actual: Datos Sintéticos Realistas**
+
+Esta versión usa datos **simulados** basados en patrones reales porque:
+- ✅ Prototipo funcional completo para demostración
+- ✅ Datos realistas con patrones estacionales y de eventos
+- ✅ Cobertura completa: 6 ciudades × 365 días × 4 tipos de métricas
+- ⚠️ No requiere API keys ni suscripciones (ideal para testing)
+
+**Para Producción: Integración con Datos Reales**
+
+El sistema está **preparado para integrar fuentes reales**:
+- 🌐 AIRROI Data Portal (configuración lista en `backend/.env`)
+- 🇪🇺 Eurostat (script de importación incluido)
+- 🌍 World Bank (API implementation disponible)
+- 📱 Google Mobility (descarga automática)
+
+Ver [data/scripts/import_real_data.py](data/scripts/import_real_data.py) para integrar datos reales.
 
 ## 🌍 Alcance
 
