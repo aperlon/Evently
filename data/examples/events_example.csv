@@ -1,0 +1,11 @@
+name,city_name,event_type,start_date,end_date,expected_attendance,actual_attendance,venue_name,description,is_recurring
+Formula 1 Barcelona,Barcelona,sports,2024-06-21,2024-06-23,200000,195000,Circuit de Barcelona-Catalunya,F1 Spanish Grand Prix,true
+Primavera Sound,Barcelona,music,2024-05-30,2024-06-01,200000,220000,Parc del Fòrum,International Music Festival,true
+ADE Amsterdam,Amsterdam,music,2024-10-16,2024-10-20,400000,450000,Various venues,Amsterdam Dance Event,true
+NDSM Festival,Amsterdam,festival,2024-08-03,2024-08-05,75000,82000,NDSM Wharf,Urban arts festival,true
+Dubai Shopping Festival,Dubai,fair,2024-01-12,2024-02-12,4000000,4500000,Various malls,Shopping and entertainment festival,true
+Art Dubai,Dubai,culture,2024-03-01,2024-03-03,30000,35000,Madinat Jumeirah,Contemporary art fair,true
+F1 Singapore,Singapore,sports,2024-09-20,2024-09-22,300000,285000,Marina Bay Street Circuit,Formula 1 night race,true
+Singapore Food Festival,Singapore,festival,2024-07-12,2024-07-28,500000,550000,Various locations,Culinary festival,true
+Art Basel Miami,Miami,culture,2024-12-06,2024-12-08,80000,85000,Miami Beach Convention Center,Contemporary art show,true
+Miami Music Week,Miami,music,2024-03-18,2024-03-24,300000,350000,Various venues,Electronic music festival week,true

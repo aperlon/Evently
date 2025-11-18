@@ -198,11 +198,38 @@ npm run dev
 
 ## 📊 Fuentes de Datos
 
-- **AirROI Data Portal**: https://www.airroi.com/data-portal/
-- APIs de turismo oficiales
-- Datos abiertos de ciudades
-- Plataformas hoteleras (Booking, Airbnb)
-- Estadísticas de eventos
+### **Importación de Datos**
+
+**Tres formas de cargar datos:**
+
+1. **📁 Upload de Archivos CSV/XLSX** (Recomendado - MÁS FÁCIL)
+   ```bash
+   # Sube tus propios datos desde Excel o CSV
+   POST /api/v1/upload/cities
+   POST /api/v1/upload/events
+   POST /api/v1/upload/hotel-metrics
+   POST /api/v1/upload/tourism-metrics
+   ```
+   ✅ No requiere API keys
+   ✅ Funciona offline
+   ✅ Importa miles de registros en segundos
+
+   📖 **Guía completa:** [docs/FILE_UPLOADS.md](docs/FILE_UPLOADS.md)
+
+   📥 **Ejemplos:** Ver `data/examples/` para CSV de ejemplo
+
+2. **🌐 APIs Externas**
+   - **AirROI Data Portal**: https://www.airroi.com/data-portal/
+   - **Eurostat** (turismo europeo)
+   - **World Bank** (estadísticas globales)
+   - **Google Mobility** (movilidad urbana)
+
+   Ver [data/scripts/import_real_data.py](data/scripts/import_real_data.py)
+
+3. **🔧 Datos Sintéticos** (para testing)
+   ```bash
+   python data/scripts/generate_sample_data.py
+   ```
 
 ## 🔬 Metodología
 

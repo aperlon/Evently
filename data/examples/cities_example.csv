@@ -1,0 +1,6 @@
+name,country,country_code,continent,latitude,longitude,timezone,population,annual_tourists,hotel_rooms,avg_hotel_price_usd
+Barcelona,Spain,ESP,Europe,41.3874,2.1686,Europe/Madrid,1620000,9000000,70000,150
+Amsterdam,Netherlands,NLD,Europe,52.3676,4.9041,Europe/Amsterdam,872680,8700000,35000,180
+Dubai,UAE,ARE,Asia,25.2048,55.2708,Asia/Dubai,3400000,16700000,120000,200
+Singapore,Singapore,SGP,Asia,1.3521,103.8198,Asia/Singapore,5700000,19100000,65000,220
+Miami,United States,USA,North America,25.7617,-80.1918,America/New_York,470000,24200000,95000,190
