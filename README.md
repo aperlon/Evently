@@ -143,44 +143,58 @@ Evently/
 
 ## 📦 Instalación y Uso
 
-### Prerequisitos
-- Docker y Docker Compose
-- Node.js 18+ (para desarrollo frontend)
-- Python 3.11+ (para desarrollo backend)
+### 🚀 Tres Formas de Ejecutar (¡elige la que prefieras!)
 
-### Inicio Rápido
-
+**1️⃣ Script Automático (Lo más fácil):**
 ```bash
-# Clonar el repositorio
-git clone https://github.com/aperlon/Evently.git
 cd Evently
 
-# Iniciar servicios con Docker
-docker-compose up -d
+# Con Docker (setup automático)
+./start.sh
 
-# Acceder a la aplicación
-# Frontend: http://localhost:3000
-# API: http://localhost:8000
-# API Docs: http://localhost:8000/docs
+# SIN Docker (más rápido para desarrollo)
+./dev.sh
 ```
 
-### Desarrollo Local
-
-#### Backend
+**2️⃣ Docker Compose (Para producción):**
 ```bash
+docker-compose up -d
+docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+```
+
+**3️⃣ Manual - Solo 2 Terminales (Para desarrollo activo):**
+```bash
+# Terminal 1: Backend
 cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # Crear con: python3 -m venv venv
 pip install -r requirements.txt
 uvicorn app.main:app --reload
-```
 
-#### Frontend
-```bash
+# Terminal 2: Frontend
 cd frontend
 npm install
-npm start
+npm run dev
 ```
+
+### 📖 Guías Detalladas
+
+- **[QUICKSTART.md](QUICKSTART.md)** - Inicio en 5 minutos (español)
+- **[SIN_DOCKER.md](SIN_DOCKER.md)** - Desarrollo sin Docker (¡MÁS RÁPIDO!)
+- **[SETUP.md](SETUP.md)** - Documentación completa
+
+### Prerequisitos
+
+| Con Docker | Sin Docker |
+|------------|------------|
+| Docker y Docker Compose | Python 3.11+ |
+| | Node.js 18+ |
+| | PostgreSQL 15 |
+
+### URLs de Acceso
+
+- 🌐 **Frontend**: http://localhost:3000
+- 📡 **API**: http://localhost:8000
+- 📚 **API Docs**: http://localhost:8000/api/v1/docs
 
 ## 📊 Fuentes de Datos
 
