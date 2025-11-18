@@ -13,7 +13,7 @@
 Esta versión usa datos **simulados** basados en patrones reales porque:
 - ✅ Prototipo funcional completo para demostración
 - ✅ Datos realistas con patrones estacionales y de eventos
-- ✅ Cobertura completa: 6 ciudades × 365 días × 4 tipos de métricas
+- ✅ Cobertura completa: **16 ciudades** × 365 días × 4 tipos de métricas
 - ⚠️ No requiere API keys ni suscripciones (ideal para testing)
 
 **Para Producción: Integración con Datos Reales**
@@ -37,16 +37,37 @@ La solución analiza cómo eventos masivos influyen en:
 - 🏪 **Actividad económica local**: Comercio, restauración, servicios
 - ✈️ **Movilidad y llegadas**: Tráfico aéreo y terrestre
 
-## 🏙️ Ciudades y Eventos Analizados
+## 🌍 16 Ciudades Globales Analizadas
 
-| Ciudad | Eventos Principales |
-|--------|---------------------|
-| **Londres** | Maratón, Wimbledon, NFL London, conciertos masivos |
-| **Tokio** | Maratón, grandes ferias, eventos culturales |
-| **París** | Roland Garros, Fashion Week, conciertos |
-| **Nueva York** | NYC Marathon, US Open, eventos musicales |
-| **Madrid** | Champions League, conciertos, ferias, festivales |
-| **Berlín/Chicago** | Maratones, festivales musicales |
+### Europa 🇪🇺
+| Ciudad | País | Eventos Principales |
+|--------|------|---------------------|
+| **Londres** 🇬🇧 | Reino Unido | Wimbledon, Maratón, NFL London, conciertos masivos |
+| **París** 🇫🇷 | Francia | Roland Garros, Fashion Week, Maratón |
+| **Madrid** 🇪🇸 | España | Champions League, ferias, festivales |
+| **Berlín** 🇩🇪 | Alemania | Maratón, festivales musicales, ferias tech |
+| **Barcelona** 🇪🇸 | España | Mobile World Congress, Smart City Expo |
+| **Amsterdam** 🇳🇱 | Países Bajos | Amsterdam Dance Event, festivales culturales |
+
+### América 🌎
+| Ciudad | País | Eventos Principales |
+|--------|------|---------------------|
+| **Nueva York** 🇺🇸 | Estados Unidos | NYC Marathon, US Open, eventos musicales |
+| **Los Angeles** 🇺🇸 | Estados Unidos | Oscars, Grammy, Super Bowl, festivales |
+| **Chicago** 🇺🇸 | Estados Unidos | Lollapalooza, Maratón, festivales de jazz |
+| **Miami** 🇺🇸 | Estados Unidos | Art Basel, Ultra Music Festival, Miami Open |
+| **Rio de Janeiro** 🇧🇷 | Brasil | Carnaval, Rock in Rio, eventos deportivos |
+| **São Paulo** 🇧🇷 | Brasil | Formula 1, São Paulo Fashion Week, Lollapalooza |
+
+### Asia-Pacífico 🌏
+| Ciudad | País | Eventos Principales |
+|--------|------|---------------------|
+| **Tokio** 🇯🇵 | Japón | Tokyo Game Show, Maratón, eventos culturales |
+| **Singapur** 🇸🇬 | Singapur | Formula 1, festivales gastronómicos, tech summits |
+| **Dubai** 🇦🇪 | Emiratos Árabes | Dubai Expo, World Cup events, festivales |
+| **Sydney** 🇦🇺 | Australia | Sydney Festival, Mardi Gras, eventos deportivos |
+
+**Total: 16 ciudades en 5 continentes** 🌍🌎🌏🌍🌏
 
 ## 👥 Usuarios Objetivo
 
@@ -58,26 +79,49 @@ La solución analiza cómo eventos masivos influyen en:
 
 ## ✨ Funcionalidades Principales
 
-### 1. Visualización de Tendencias
+### 🌍 1. Globo 3D Interactivo (Landing Page)
+- Visualización 3D del planeta Tierra con rotación automática
+- 16 pins rojos interactivos sobre ciudades analizadas
+- Click en cada ciudad para ver información detallada
+- Stats impactantes: $12.4B impacto analizado, 847K empleos creados, 420% ROI promedio
+- Tecnología: `react-globe.gl` + `three.js`
+
+### 📊 2. Dashboard Analítico
 - Series temporales de turismo, precios y ocupación
 - Marcadores de eventos en líneas temporales
 - Comparativas antes/durante/después del evento
+- KPIs principales: impacto económico, ROI, empleos creados
 
-### 2. Análisis Comparativo
-- Comparar diferentes ciudades
+### 🔍 3. Análisis Comparativo
+- Comparar diferentes ciudades lado a lado
 - Comparar diferentes tipos de eventos
-- Análisis multi-año y estacionalidad
+- Análisis multi-año y detección de estacionalidad
+- Gráficos interactivos con Recharts
 
-### 3. Simulador "What-If"
+### 🔮 4. Simulador "What-If"
 - Escenarios de crecimiento del evento
 - Proyecciones de impacto económico
-- Sensibilidad de variables clave
+- Sensibilidad de variables clave (asistencia, precios, duración)
+- Simulaciones multi-año
 
-### 4. KPIs y Métricas
-- Impacto económico total
-- ROI para organizadores
-- Beneficio turístico neto
-- Índice de saturación hotelera
+### 📄 5. About Us / Sobre Nosotros
+- Misión y visión del proyecto
+- Propuesta de valor clara
+- Público objetivo: gobiernos, organizadores, hoteles, consultoras
+- Stats de impacto con animaciones
+
+### 🧪 6. Metodología
+- Proceso Design Thinking (5 fases)
+- Pipeline ETL visualizado (Extract → Transform → Load)
+- Motor de análisis de impacto explicado
+- Cálculo de métricas paso a paso
+
+### 📚 7. Case Studies / Casos de Éxito
+- **Rio Carnival 2024**: $1.2B impacto, 47K empleos, 520% ROI
+- **Paris Fashion Week 2024**: $685M impacto, 12.5K empleos, 380% ROI
+- **Tokyo Game Show 2024**: $428M impacto, 8.9K empleos, 340% ROI
+- Breakdown económico detallado por evento
+- Timeline de impacto (antes, durante, después)
 
 ## 🏗️ Arquitectura del Sistema
 
@@ -127,9 +171,15 @@ Evently/
 ### Frontend
 - **React 18**: Framework UI
 - **TypeScript**: Tipado estático
-- **Recharts**: Visualizaciones interactivas
-- **TailwindCSS**: Estilos modernos
+- **Vite**: Build tool ultrarrápido
+- **React Router**: Navegación y routing
 - **React Query**: Gestión de estado y cache
+- **Recharts**: Visualizaciones de datos interactivas
+- **react-globe.gl**: Globo 3D interactivo
+- **Three.js**: Renderizado 3D WebGL
+- **Framer Motion**: Animaciones fluidas y profesionales
+- **Lucide React**: 110+ iconos SVG de alta calidad
+- **TailwindCSS**: Estilos modernos y responsivos
 - **Axios**: Cliente HTTP
 
 ### Base de Datos
@@ -254,22 +304,34 @@ npm run dev
 ## 📈 Roadmap
 
 ### Fase 1: MVP ✅ COMPLETADO
-- [x] Arquitectura base
+- [x] Arquitectura base (FastAPI + React + PostgreSQL)
 - [x] Modelos de datos (City, Event, Metrics, Impact)
-- [x] ETL básico (generador de datos)
-- [x] API REST (15+ endpoints)
-- [x] Dashboard básico (React + TypeScript)
-- [x] 6 ciudades + 12 eventos
-- [x] Analytics engine (impact analyzer)
-- [x] Simulador what-if
+- [x] ETL básico (generador de datos sintéticos)
+- [x] API REST (20+ endpoints)
+- [x] **16 ciudades globales** en 5 continentes
+- [x] **Globo 3D interactivo** con pins clickables
+- [x] Dashboard completo con visualizaciones
+- [x] Analytics engine (impact analyzer con baseline vs event)
+- [x] Simulador what-if (scenarios y predicciones)
+- [x] **Upload de CSV/XLSX** para importar datos
+- [x] **About Us page** (misión, visión, público objetivo)
+- [x] **Methodology page** (Design Thinking + ETL pipeline)
+- [x] **Case Studies page** (3 casos con datos detallados)
+- [x] **Footer profesional** con navegación completa
+- [x] **Animaciones con Framer Motion**
 - [x] Deployment guides (Vercel, Railway, Supabase)
+- [x] Modo desarrollo sin Docker (más rápido)
 
-### Fase 2: Expansion
+### Fase 2: Expansion 🚧 EN PROGRESO
 - [ ] Integración con datos reales (AIRROI, Eurostat, World Bank)
-- [ ] ML para predicciones
-- [ ] Visualizaciones avanzadas (charts, maps)
-- [ ] Exportación de reportes (PDF/Excel)
-- [ ] Multi-idioma
+- [ ] ML para predicciones avanzadas (ARIMA, Prophet)
+- [ ] Mapas de calor interactivos
+- [ ] Exportación de reportes (PDF/Excel con branding)
+- [ ] Multi-idioma (ES/EN)
+- [ ] Dark mode toggle
+- [ ] Tour guiado para nuevos usuarios
+- [ ] Más ciudades (expandir a 30+ ciudades)
+- [ ] API pública con documentación Swagger
 
 ### Fase 3: Producción
 - [ ] Autenticación y roles
