@@ -15,8 +15,13 @@ export interface City {
   name: string
   country: string
   country_code: string
+  continent: string
+  latitude: number
+  longitude: number
+  timezone: string
   population: number
   annual_tourists: number
+  hotel_rooms: number
   avg_hotel_price_usd: number
 }
 
