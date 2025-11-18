@@ -226,27 +226,47 @@ npm run dev
 
 ## 📈 Roadmap
 
-### Fase 1: MVP (Actual)
+### Fase 1: MVP ✅ COMPLETADO
 - [x] Arquitectura base
-- [ ] Modelos de datos
-- [ ] ETL básico
-- [ ] API REST
-- [ ] Dashboard básico
-- [ ] 3 ciudades + 5 eventos
+- [x] Modelos de datos (City, Event, Metrics, Impact)
+- [x] ETL básico (generador de datos)
+- [x] API REST (15+ endpoints)
+- [x] Dashboard básico (React + TypeScript)
+- [x] 6 ciudades + 12 eventos
+- [x] Analytics engine (impact analyzer)
+- [x] Simulador what-if
+- [x] Deployment guides (Vercel, Railway, Supabase)
 
 ### Fase 2: Expansion
-- [ ] 10+ ciudades
+- [ ] Integración con datos reales (AIRROI, Eurostat, World Bank)
 - [ ] ML para predicciones
-- [ ] Simulador what-if avanzado
-- [ ] Exportación de reportes
+- [ ] Visualizaciones avanzadas (charts, maps)
+- [ ] Exportación de reportes (PDF/Excel)
 - [ ] Multi-idioma
 
 ### Fase 3: Producción
 - [ ] Autenticación y roles
 - [ ] SaaS multi-tenant
-- [ ] Integración con APIs externas
 - [ ] Mobile app
+- [ ] Real-time data
 - [ ] Marketplace de datos
+
+## 🌐 Deployment en Producción
+
+**¿Listo para llevar a producción?** Lee **[DEPLOYMENT.md](DEPLOYMENT.md)**
+
+**Stack recomendado (GRATIS):**
+- 🎨 **Frontend**: Vercel (deploy en 2 min)
+- ⚙️ **Backend**: Railway ($5 crédito gratis)
+- 🗄️ **Database**: Supabase (PostgreSQL gratis)
+
+```bash
+# Deploy rápido:
+# 1. Frontend → vercel.com (importar repo)
+# 2. Database → supabase.com (crear proyecto)
+# 3. Backend → railway.app (importar repo)
+# ¡Listo en 10 minutos!
+```
 
 ## 🤝 Contribución
 
