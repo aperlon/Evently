@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import Globe from 'react-globe.gl'
+import { motion } from 'framer-motion'
+import { TrendingUp, DollarSign, Users, Globe2 } from 'lucide-react'
 import { apiService, City } from '../services/api'
 
 interface GlobePoint {
@@ -67,22 +69,86 @@ function GlobeLanding() {
     <div className="flex h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       {/* Globe Section */}
       <div className="flex-1 flex flex-col items-center justify-center relative">
-        {/* Title Overlay */}
-        <div className="absolute top-8 left-8 z-10">
-          <h1 className="text-5xl font-bold text-white mb-2">
-            Evently
-          </h1>
-          <p className="text-xl text-blue-200">
-            Global Event Impact Analyzer
-          </p>
-          <div className="mt-4 flex gap-2">
-            <span className="px-3 py-1 bg-red-500 bg-opacity-20 border border-red-500 rounded-full text-red-300 text-sm">
-              📍 {cities?.length || 0} Cities
+        {/* Hero Section with Stats */}
+        <div className="absolute top-8 left-8 z-10 max-w-md">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <h1 className="text-6xl font-bold text-white mb-3 leading-tight">
+              Evently
+            </h1>
+            <p className="text-2xl text-blue-200 mb-6">
+              Global Event Impact Analyzer
+            </p>
+          </motion.div>
+
+          {/* Impactful Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="grid grid-cols-2 gap-3 mb-4"
+          >
+            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-4 border border-white border-opacity-20">
+              <div className="flex items-center gap-2 mb-2">
+                <DollarSign className="w-5 h-5 text-green-400" />
+                <span className="text-xs text-green-200 font-medium uppercase tracking-wide">
+                  Total Impact
+                </span>
+              </div>
+              <div className="text-3xl font-bold text-white">$12.4B</div>
+              <div className="text-xs text-blue-200 mt-1">Analyzed to date</div>
+            </div>
+
+            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-4 border border-white border-opacity-20">
+              <div className="flex items-center gap-2 mb-2">
+                <Users className="w-5 h-5 text-purple-400" />
+                <span className="text-xs text-purple-200 font-medium uppercase tracking-wide">
+                  Jobs Created
+                </span>
+              </div>
+              <div className="text-3xl font-bold text-white">847K</div>
+              <div className="text-xs text-blue-200 mt-1">From major events</div>
+            </div>
+
+            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-4 border border-white border-opacity-20">
+              <div className="flex items-center gap-2 mb-2">
+                <Globe2 className="w-5 h-5 text-blue-400" />
+                <span className="text-xs text-blue-200 font-medium uppercase tracking-wide">
+                  Cities
+                </span>
+              </div>
+              <div className="text-3xl font-bold text-white">{cities?.length || 0}</div>
+              <div className="text-xs text-blue-200 mt-1">Worldwide coverage</div>
+            </div>
+
+            <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-xl p-4 border border-white border-opacity-20">
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingUp className="w-5 h-5 text-orange-400" />
+                <span className="text-xs text-orange-200 font-medium uppercase tracking-wide">
+                  Avg ROI
+                </span>
+              </div>
+              <div className="text-3xl font-bold text-white">420%</div>
+              <div className="text-xs text-blue-200 mt-1">Return on investment</div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="flex gap-2"
+          >
+            <span className="px-3 py-1 bg-red-500 bg-opacity-20 border border-red-500 rounded-full text-red-300 text-sm backdrop-blur-sm">
+              📍 Real-time Data
             </span>
-            <span className="px-3 py-1 bg-blue-500 bg-opacity-20 border border-blue-500 rounded-full text-blue-300 text-sm">
-              🌍 Global Coverage
+            <span className="px-3 py-1 bg-blue-500 bg-opacity-20 border border-blue-500 rounded-full text-blue-300 text-sm backdrop-blur-sm">
+              🌍 5 Continents
             </span>
-          </div>
+          </motion.div>
         </div>
 
         {/* Globe */}

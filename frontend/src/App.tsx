@@ -5,6 +5,10 @@ import EventsList from './pages/EventsList'
 import EventDetails from './pages/EventDetails'
 import CitiesComparison from './pages/CitiesComparison'
 import WhatIfSimulator from './pages/WhatIfSimulator'
+import AboutUs from './pages/AboutUs'
+import Methodology from './pages/Methodology'
+import CaseStudies from './pages/CaseStudies'
+import Footer from './components/Footer'
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,8 +34,11 @@ function Layout({ children }: { children: React.ReactNode }) {
               <Link to="/compare" className="text-gray-700 hover:text-primary-600">
                 Compare
               </Link>
-              <Link to="/simulator" className="text-gray-700 hover:text-primary-600">
-                What-If
+              <Link to="/about" className="text-gray-700 hover:text-primary-600">
+                About
+              </Link>
+              <Link to="/case-studies" className="text-gray-700 hover:text-primary-600">
+                Cases
               </Link>
             </nav>
           </div>
@@ -44,13 +51,7 @@ function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <p className="text-center text-gray-500 text-sm">
-            Evently - Analyzing the economic and touristic impact of urban events
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   )
 }
@@ -78,6 +79,9 @@ function AppRoutes() {
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/compare" element={<CitiesComparison />} />
         <Route path="/simulator" element={<WhatIfSimulator />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/methodology" element={<Methodology />} />
+        <Route path="/case-studies" element={<CaseStudies />} />
       </Routes>
     </Layout>
   )
