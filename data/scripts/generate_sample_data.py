@@ -8,8 +8,11 @@ from datetime import date, timedelta
 import random
 import numpy as np
 
-# Add backend to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../backend'))
+# Add backend to path (works both locally and in Docker)
+backend_path = os.environ.get('BACKEND_PATH', os.path.join(os.path.dirname(__file__), '../../backend'))
+if os.path.exists('/app'):  # Inside Docker container
+    backend_path = '/app'
+sys.path.insert(0, backend_path)
 
 from sqlalchemy.orm import Session
 from app.core.database import engine, SessionLocal, Base
