@@ -32,7 +32,7 @@ docker-compose up -d
 sleep 30
 
 # 3. Genera los datos de muestra
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 
 # 4. Abre tu navegador
 # Frontend: http://localhost:3000
@@ -223,7 +223,7 @@ docker-compose down -v
 
 **Regenerar datos:**
 ```bash
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 ```
 
 ---

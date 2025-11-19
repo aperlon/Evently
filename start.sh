@@ -94,7 +94,7 @@ if docker-compose exec -T backend python -c "from app.core.database import Sessi
     echo "  ✓ Sample data already exists"
 else
     echo "  📊 Generating sample data..."
-    docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+    docker-compose exec backend python /data/scripts/generate_sample_data.py
 fi
 
 # Test API

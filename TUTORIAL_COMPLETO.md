@@ -533,7 +533,7 @@ docker-compose down -v
 ./start.sh
 
 # Regenerar datos
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 
 # Entrar a la base de datos
 docker-compose exec db psql -U evently
@@ -599,7 +599,7 @@ sudo systemctl restart docker
 
 ```bash
 # Con Docker:
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 
 # Sin Docker:
 cd backend

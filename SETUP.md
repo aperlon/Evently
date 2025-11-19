@@ -27,7 +27,7 @@ docker-compose up -d
 docker-compose logs -f
 
 # 4. Generate sample data
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 
 # 5. Access the application
 # Frontend: http://localhost:3000
@@ -316,7 +316,7 @@ Make sure you've run the sample data generator:
 python data/scripts/generate_sample_data.py
 
 # Or with Docker:
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 ```
 
 ### Port Already in Use

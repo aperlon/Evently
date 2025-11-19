@@ -209,7 +209,7 @@ cd Evently
 **2️⃣ Docker Compose (Para producción):**
 ```bash
 docker-compose up -d
-docker-compose exec backend python /app/../data/scripts/generate_sample_data.py
+docker-compose exec backend python /data/scripts/generate_sample_data.py
 ```
 
 **3️⃣ Manual - Solo 2 Terminales (Para desarrollo activo):**
