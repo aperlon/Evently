@@ -14,9 +14,26 @@ function EventsList() {
   }
 
   if (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const isNetworkError = errorMessage.includes('Network Error') || errorMessage.includes('Failed to fetch')
+    
     return (
-      <div className="card bg-red-50">
-        <p className="text-red-600">Error loading events</p>
+      <div className="card bg-red-50 border border-red-200">
+        <div className="space-y-2">
+          <p className="text-red-800 font-semibold">Error loading events</p>
+          <p className="text-red-600 text-sm">
+            {isNetworkError 
+              ? 'Cannot connect to backend API. Please check:'
+              : `Error: ${errorMessage}`}
+          </p>
+          {isNetworkError && (
+            <ul className="text-red-600 text-sm list-disc list-inside mt-2 space-y-1">
+              <li>Is the backend server running? (http://localhost:8000)</li>
+              <li>Check browser console (F12) for more details</li>
+              <li>Verify API URL in .env file: VITE_API_URL</li>
+            </ul>
+          )}
+        </div>
       </div>
     )
   }

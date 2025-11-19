@@ -40,12 +40,15 @@ export interface Event {
 export interface EventImpact {
   id: number
   event_id: number
+  baseline_daily_visitors?: number
+  event_period_daily_visitors?: number
   visitor_increase_pct: number
   price_increase_pct: number
   occupancy_increase_pct: number
   total_economic_impact_usd: number
   jobs_created: number
   roi_ratio: number
+  additional_visitors?: number
 }
 
 export interface DashboardKPIs {

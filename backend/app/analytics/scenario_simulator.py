@@ -2,7 +2,7 @@
 What-If Scenario Simulator
 Simulates the impact of changes in event parameters
 """
-from typing import Dict
+from typing import Dict, Optional
 from sqlalchemy.orm import Session
 
 from app.models import Event, EventImpact

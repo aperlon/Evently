@@ -44,7 +44,9 @@ function Dashboard() {
         <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <h3 className="text-sm font-medium opacity-90">Total Events Analyzed</h3>
           <p className="text-4xl font-bold mt-2">{kpis?.total_events_analyzed || 0}</p>
-          <p className="text-sm mt-2 opacity-75">Across {kpis?.total_cities || 0} cities</p>
+          <p className="text-sm mt-2 opacity-75">
+            {kpis?.total_cities || 0} cities in system
+          </p>
         </div>
 
         <div className="card bg-gradient-to-br from-green-500 to-green-600 text-white">
