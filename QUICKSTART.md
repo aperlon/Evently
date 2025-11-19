@@ -1,5 +1,7 @@
 # 🚀 EVENTLY - Inicio Rápido (5 minutos)
 
+> **📚 ¿Primera vez?** Lee el [TUTORIAL_COMPLETO.md](TUTORIAL_COMPLETO.md) para instrucciones detalladas desde cero
+
 ## ⚡ Opción 1: Script Automático (MÁS FÁCIL)
 
 ```bash
@@ -59,9 +61,9 @@ curl http://localhost:8000/api/v1/analytics/dashboard/kpis
 **Debería responder:**
 ```json
 {
-  "total_events_analyzed": 12,
-  "total_cities": 6,
-  "avg_economic_impact_per_event_usd": 45000000,
+  "total_events_analyzed": 20+,
+  "total_cities": 16,
+  "avg_economic_impact_per_event_usd": 450000000,
   "avg_visitor_increase_pct": 35.2,
   ...
 }
@@ -78,13 +80,29 @@ La aplicación actualmente usa **datos simulados realistas** porque:
 - ✅ Los datos simulados siguen patrones reales
 - ✅ Sirven perfectamente para demostración
 
-### Ciudades Incluidas (con datos 2024):
-1. **Londres** - Marathon, Wimbledon, NFL London
-2. **Tokio** - Marathon, Design Week
-3. **París** - Roland Garros, Fashion Week
-4. **Nueva York** - NYC Marathon, US Open
-5. **Madrid** - Champions League, Mad Cool Festival
-6. **Berlín** - Marathon, Festival of Lights
+### 16 Ciudades Globales (con datos 2024):
+
+**Europa 🇪🇺:**
+1. **Londres** 🇬🇧 - Wimbledon, Marathon, NFL London
+2. **París** 🇫🇷 - Roland Garros, Fashion Week
+3. **Madrid** 🇪🇸 - Champions League, festivales
+4. **Berlín** 🇩🇪 - Marathon, tech fairs
+5. **Barcelona** 🇪🇸 - Mobile World Congress
+6. **Amsterdam** 🇳🇱 - Dance events
+
+**América 🌎:**
+7. **Nueva York** 🇺🇸 - NYC Marathon, US Open
+8. **Los Angeles** 🇺🇸 - Oscars, Grammy, Super Bowl
+9. **Chicago** 🇺🇸 - Lollapalooza, Marathon
+10. **Miami** 🇺🇸 - Art Basel, Ultra Music Festival
+11. **Rio de Janeiro** 🇧🇷 - Carnaval, Rock in Rio
+12. **São Paulo** 🇧🇷 - Formula 1, Fashion Week
+
+**Asia-Pacífico 🌏:**
+13. **Tokio** 🇯🇵 - Game Show, Marathon
+14. **Singapur** 🇸🇬 - Formula 1, festivals
+15. **Dubai** 🇦🇪 - Dubai Expo, events
+16. **Sydney** 🇦🇺 - Sydney Festival, Mardi Gras
 
 ### Usar Datos Reales
 
@@ -115,17 +133,26 @@ Ver `data/scripts/import_real_data.py` para más detalles.
 
 ## 🎯 Qué Puedes Hacer en la App
 
-### 1. **Dashboard** (http://localhost:3000)
-- Ver KPIs globales
-- Total de eventos analizados
-- Impacto económico promedio
-- Empleos creados
-- Incremento de visitantes y precios
+### 1. **Landing - Globo 3D** (http://localhost:3000)
+- Visualización 3D del planeta con 16 pins
+- Click en cualquier ciudad para ver detalles
+- Stats: $12.4B impacto, 847K empleos, 420% ROI
 
-### 2. **Explorar Eventos** (http://localhost:3000/events)
-- Navegar 12 eventos principales
+### 2. **Dashboard** (http://localhost:3000/dashboard)
+- Ver KPIs globales
+- Gráficos de tendencias
+- Impacto económico total
+- Empleos creados
+
+### 3. **Explorar Eventos** (http://localhost:3000/events)
+- Navegar 20+ eventos principales
 - Ver detalles de cada evento
 - Analizar impacto individual
+
+### 4. **About, Methodology, Case Studies** (http://localhost:3000/about)
+- Misión y visión del proyecto
+- Pipeline ETL y Design Thinking
+- Casos reales: Rio Carnival, Paris Fashion Week, Tokyo Game Show
 
 ### 3. **Analizar Impacto** (API)
 ```bash
@@ -280,9 +307,10 @@ docker-compose restart backend
 ## 💡 Tips
 
 - **Performance**: La primera carga puede tardar ~30 segundos
-- **Datos**: Los datos de 2024 cubren todo el año (365 días × 6 ciudades)
+- **Datos**: Los datos de 2024 cubren todo el año (365 días × **16 ciudades**)
 - **API**: Usa `/docs` para probar endpoints interactivamente
 - **Desarrollo**: Modifica el código y se recarga automáticamente
+- **Globo 3D**: Usa mouse para rotar, scroll para zoom, click en pins para info
 
 ---
 
