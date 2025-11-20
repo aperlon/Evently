@@ -5,11 +5,8 @@ import { motion } from 'framer-motion'
 import { TrendingUp, DollarSign, Users, Globe2 } from 'lucide-react'
 import { apiService, City } from '../services/api'
 
-interface GlobePoint {
-  lat: number
-  lng: number
-  size: number
-  color: string
+interface CityHex {
+  center: [number, number]
   city: City
 }
 
@@ -27,13 +24,10 @@ function GlobeLanding() {
     queryFn: apiService.getCities,
   })
 
-  // Convert cities to globe points
-  const points: GlobePoint[] =
+  // Convert cities to hexagons
+  const hexData: CityHex[] =
     cities?.map((city) => ({
-      lat: city.latitude,
-      lng: city.longitude,
-      size: 0.5,
-      color: '#ef4444', // red-500
+      center: [city.latitude, city.longitude],
       city,
     })) || []
 
@@ -156,45 +150,57 @@ function GlobeLanding() {
           ref={globeEl}
           width={dimensions.width}
           height={dimensions.height}
-          globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+          globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
           backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-          pointsData={points}
-          pointLat={(d: any) => d.lat}
-          pointLng={(d: any) => d.lng}
-          pointColor={(d: any) => d.color}
-          pointAltitude={0.02}
-          pointRadius={(d: any) => d.size}
-          pointLabel={(d: any) => `
-            <div style="
-              background: rgba(0, 0, 0, 0.8);
-              padding: 12px;
-              border-radius: 8px;
-              color: white;
-              font-family: sans-serif;
-              border: 2px solid #ef4444;
-            ">
-              <div style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">
-                ${d.city.name}
+          showAtmosphere={true}
+          atmosphereColor="#3b82f6"
+          atmosphereAltitude={0.15}
+          hexBinPointsData={hexData}
+          hexBinPointLat={(d: any) => d.center[0]}
+          hexBinPointLng={(d: any) => d.center[1]}
+          hexBinPointWeight={1}
+          hexAltitude={0.015}
+          hexTopColor={() => '#ef4444'}
+          hexSideColor={() => '#b91c1c'}
+          hexBinMerge={false}
+          hexLabel={(d: any) => {
+            const city = d.points[0]?.city
+            if (!city) return ''
+            return `
+              <div style="
+                background: rgba(0, 0, 0, 0.9);
+                padding: 12px;
+                border-radius: 8px;
+                color: white;
+                font-family: sans-serif;
+                border: 2px solid #ef4444;
+              ">
+                <div style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">
+                  ${city.name}
+                </div>
+                <div style="font-size: 12px; opacity: 0.8;">
+                  ${city.country}
+                </div>
+                <div style="font-size: 11px; margin-top: 8px; opacity: 0.6;">
+                  Click for details →
+                </div>
               </div>
-              <div style="font-size: 12px; opacity: 0.8;">
-                ${d.city.country}
-              </div>
-              <div style="font-size: 11px; margin-top: 8px; opacity: 0.6;">
-                Click for details →
-              </div>
-            </div>
-          `}
-          onPointClick={(point: any) => {
-            setSelectedCity(point.city)
-            // Zoom to city
-            globeEl.current.pointOfView(
-              {
-                lat: point.lat,
-                lng: point.lng,
-                altitude: 2,
-              },
-              1000
-            )
+            `
+          }}
+          onHexClick={(hex: any) => {
+            const city = hex.points[0]?.city
+            if (city) {
+              setSelectedCity(city)
+              // Zoom to city
+              globeEl.current.pointOfView(
+                {
+                  lat: city.latitude,
+                  lng: city.longitude,
+                  altitude: 2,
+                },
+                1000
+              )
+            }
           }}
         />
 
@@ -203,7 +209,7 @@ function GlobeLanding() {
           <div className="flex items-center gap-2">
             <span>🖱️ Drag to rotate</span>
             <span>•</span>
-            <span>📍 Click city for info</span>
+            <span>🔴 Click hex for city info</span>
             <span>•</span>
             <span>🔍 Scroll to zoom</span>
           </div>
@@ -333,7 +339,7 @@ function GlobeLanding() {
               Welcome to Evently
             </h3>
             <p className="text-gray-600 mb-8 max-w-md">
-              Click on any red pin on the globe to explore how major events
+              Click on any red hexagon on the globe to explore how major events
               impact tourism, hotels, and local economies in cities worldwide.
             </p>
 
