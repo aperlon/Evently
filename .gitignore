@@ -71,6 +71,7 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+data/scripts/saved_models/
 
 # Docker
 *.log
