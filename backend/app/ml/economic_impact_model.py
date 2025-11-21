@@ -445,6 +445,164 @@ class EconomicImpactModel:
             }
         }
 
+    def predict_simple(self, event_type: str, city: str, duration_days: int,
+                       attendance: int = None) -> Dict:
+        """
+        Simplified prediction using historical averages for similar events.
+
+        Only requires minimal inputs - the system fills in the rest using
+        averages from similar events (same type, same continent).
+
+        Args:
+            event_type: Type of event (sports, music, festival, culture, business)
+            city: City name (must exist in cities.csv)
+            duration_days: Event duration in days
+            attendance: Optional attendance estimate. If not provided,
+                       uses average attendance_per_day * duration_days
+
+        Returns:
+            Dictionary with prediction, breakdown, and historical context
+        """
+        if self.best_model is None:
+            raise ValueError("Model not trained. Call train() or load() first.")
+
+        # Load data if not already loaded
+        if self.df_cities is None:
+            self.df_cities = pd.read_csv(self.data_dir / "cities.csv")
+        if self.df_events is None:
+            self.df_events = pd.read_csv(self.data_dir / "events.csv")
+        if self.df_impacts is None:
+            self.df_impacts = pd.read_csv(self.data_dir / "event_impacts.csv")
+
+        # Get city info
+        city_row = self.df_cities[self.df_cities['name'] == city]
+        if city_row.empty:
+            available_cities = self.df_cities['name'].tolist()
+            raise ValueError(f"City '{city}' not found. Available: {available_cities}")
+
+        city_data = city_row.iloc[0]
+        continent = city_data['continent']
+        country = city_data['country']
+
+        # Get events of this type
+        events_of_type = self.df_events[self.df_events['event_type'] == event_type]
+        if events_of_type.empty:
+            available_types = self.df_events['event_type'].unique().tolist()
+            raise ValueError(f"Event type '{event_type}' not found. Available: {available_types}")
+
+        # Merge with impacts to get historical data
+        events_with_impacts = events_of_type.merge(
+            self.df_impacts,
+            on='event_name',
+            how='inner'
+        )
+
+        # Get cities with continent info
+        events_with_cities = events_with_impacts.merge(
+            self.df_cities[['name', 'continent', 'country']],
+            left_on='city_x',
+            right_on='name',
+            how='left'
+        )
+
+        # Filter by continent (or use all if not enough data)
+        same_continent = events_with_cities[events_with_cities['continent'] == continent]
+
+        if len(same_continent) >= 2:
+            reference_data = same_continent
+            reference_scope = f"{continent} ({len(same_continent)} eventos)"
+        else:
+            reference_data = events_with_cities
+            reference_scope = f"Global ({len(events_with_cities)} eventos)"
+
+        # Calculate averages from historical data
+        avg_visitor_increase = reference_data['visitor_increase_pct'].mean()
+        avg_price_increase = reference_data['price_increase_pct'].mean()
+        avg_occupancy_boost = (reference_data['event_occupancy_pct'] -
+                              reference_data['baseline_occupancy_pct']).mean()
+
+        # Calculate average attendance per day
+        # Get duration info from events dataframe
+        events_duration = self.df_events[['event_name', 'start_date', 'end_date']].copy()
+        events_duration['start_date'] = pd.to_datetime(events_duration['start_date'])
+        events_duration['end_date'] = pd.to_datetime(events_duration['end_date'])
+        events_duration['duration'] = (events_duration['end_date'] -
+                                       events_duration['start_date']).dt.days + 1
+
+        # Merge duration with reference data
+        events_with_duration = reference_data.merge(
+            events_duration[['event_name', 'duration']],
+            on='event_name',
+            how='left'
+        )
+        events_with_duration['attendance_per_day'] = (
+            events_with_duration['additional_visitors'] / events_with_duration['duration'].clip(lower=1)
+        )
+
+        avg_attendance_per_day = events_with_duration['attendance_per_day'].mean()
+        avg_impact_per_day = (events_with_duration['total_economic_impact_usd'] /
+                             events_with_duration['duration'].clip(lower=1)).mean()
+
+        # Handle NaN values (when no matching events found)
+        if pd.isna(avg_attendance_per_day):
+            avg_attendance_per_day = 50000  # Default fallback
+        if pd.isna(avg_visitor_increase):
+            avg_visitor_increase = 50.0
+        if pd.isna(avg_price_increase):
+            avg_price_increase = 60.0
+        if pd.isna(avg_occupancy_boost):
+            avg_occupancy_boost = 20.0
+        if pd.isna(avg_impact_per_day):
+            avg_impact_per_day = 50000000
+
+        # Estimate attendance if not provided
+        if attendance is None:
+            attendance = int(avg_attendance_per_day * duration_days)
+
+        # Build prediction request with estimated parameters
+        prediction_params = {
+            'event_type': event_type,
+            'city': city,
+            'attendance': attendance,
+            'duration_days': duration_days,
+            'visitor_increase_pct': avg_visitor_increase,
+            'price_increase_pct': avg_price_increase,
+            'occupancy_boost': avg_occupancy_boost,
+        }
+
+        # Get prediction from main model
+        result = self.predict(prediction_params)
+
+        # Add historical context
+        result['historical_reference'] = {
+            'reference_scope': reference_scope,
+            'events_analyzed': len(reference_data),
+            'avg_visitor_increase_pct': round(avg_visitor_increase, 1),
+            'avg_price_increase_pct': round(avg_price_increase, 1),
+            'avg_occupancy_boost_pct': round(avg_occupancy_boost, 1),
+            'avg_attendance_per_day': int(avg_attendance_per_day),
+            'avg_impact_per_day_usd': int(avg_impact_per_day),
+            'similar_events': reference_data['event_name'].tolist()[:5],
+        }
+
+        # Update input summary
+        result['input_summary']['estimated_from_historical'] = attendance is None
+        result['input_summary']['reference_continent'] = continent
+
+        return result
+
+    def get_event_types(self) -> List[str]:
+        """Get available event types from historical data."""
+        if self.df_events is None:
+            self.df_events = pd.read_csv(self.data_dir / "events.csv")
+        return self.df_events['event_type'].unique().tolist()
+
+    def get_cities(self) -> List[Dict]:
+        """Get available cities with their info."""
+        if self.df_cities is None:
+            self.df_cities = pd.read_csv(self.data_dir / "cities.csv")
+        return self.df_cities[['name', 'country', 'continent']].to_dict('records')
+
     def save(self, filename: str = "economic_impact_model.pkl"):
         """Save the trained model and preprocessors."""
         if self.best_model is None:
