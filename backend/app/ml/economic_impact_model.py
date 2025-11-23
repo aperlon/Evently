@@ -119,19 +119,47 @@ class EconomicImpactModel:
             how='left'
         )
 
-        # Get event type from events.csv
-        event_types = self.df_events[['event_name', 'event_type']].drop_duplicates()
-        # Match by event name prefix (remove year)
-        df['event_base_name'] = df['event_name'].str.replace(r'\s*\d{4}$', '', regex=True)
-        event_types['event_base_name'] = event_types['event_name'].str.replace(r'\s*\d{4}$', '', regex=True)
+        # Get event type from events.csv or use from event_impacts.csv
+        if 'event_type' not in df.columns:
+            event_types = self.df_events[['event_name', 'event_type']].drop_duplicates()
+            # Match by event name prefix (remove year)
+            df['event_base_name'] = df['event_name'].str.replace(r'\s*\d{4}$', '', regex=True)
+            event_types['event_base_name'] = event_types['event_name'].str.replace(r'\s*\d{4}$', '', regex=True)
 
-        df = df.merge(
-            event_types[['event_base_name', 'event_type']].drop_duplicates(),
-            on='event_base_name',
-            how='left'
-        )
+            df = df.merge(
+                event_types[['event_base_name', 'event_type']].drop_duplicates(),
+                on='event_base_name',
+                how='left'
+            )
+            # If still missing, try direct merge by event_name
+            if df['event_type'].isna().any():
+                df = df.merge(
+                    self.df_events[['event_name', 'event_type']].drop_duplicates(),
+                    on='event_name',
+                    how='left',
+                    suffixes=('', '_direct')
+                )
+                if 'event_type_direct' in df.columns:
+                    df['event_type'] = df['event_type'].fillna(df['event_type_direct'])
+        
+        # Ensure event_type exists, fill with 'other' if missing
+        if 'event_type' not in df.columns or df['event_type'].isna().any():
+            df['event_type'] = df.get('event_type', 'other').fillna('other')
 
-        # Calculate duration from events.csv
+        # Get attendance from impacts (use 'attendance' column if available)
+        if 'attendance' not in df.columns:
+            if 'additional_visitors' in df.columns:
+                # Will calculate after getting duration_days
+                pass
+            else:
+                # Use duration_days from event_impacts.csv if available
+                if 'duration_days' in df.columns:
+                    df['attendance'] = (df.get('annual_tourists', 10000000) / 365) * df['duration_days']
+                else:
+                    # Default to 1 day if no duration
+                    df['attendance'] = df.get('annual_tourists', 10000000) / 365
+
+        # Calculate duration from events.csv (merge after getting attendance)
         events_duration = self.df_events[['event_name', 'start_date', 'end_date']].copy()
         events_duration['start_date'] = pd.to_datetime(events_duration['start_date'])
         events_duration['end_date'] = pd.to_datetime(events_duration['end_date'])
@@ -142,18 +170,55 @@ class EconomicImpactModel:
             on='event_name',
             how='left'
         )
+        
+        # If duration_days still missing, use from event_impacts.csv or default to 1
+        if 'duration_days' not in df.columns or df['duration_days'].isna().all():
+            # Try to get from event_impacts.csv
+            if 'duration_days' in self.df_impacts.columns:
+                df = df.merge(
+                    self.df_impacts[['event_name', 'duration_days']],
+                    on='event_name',
+                    how='left',
+                    suffixes=('', '_impacts')
+                )
+                if 'duration_days_impacts' in df.columns:
+                    df['duration_days'] = df['duration_days'].fillna(df['duration_days_impacts'])
+        
+        # Fill missing duration_days with 1
+        df['duration_days'] = df['duration_days'].fillna(1)
+        
+        # Now calculate attendance if still missing
+        if 'attendance' not in df.columns or df['attendance'].isna().any():
+            if 'additional_visitors' in df.columns:
+                df['attendance'] = df['additional_visitors'].fillna(
+                    (df.get('annual_tourists', 10000000) / 365) * df['duration_days']
+                )
+            else:
+                # Estimate from annual tourists
+                df['attendance'] = (df.get('annual_tourists', 10000000) / 365) * df['duration_days']
 
-        # Get attendance from impacts (additional_visitors or calculate from visitor increase)
-        df['attendance'] = df['additional_visitors'].fillna(
-            df['baseline_daily_visitors'] * df['visitor_increase_pct'] / 100 * df['duration_days']
-        )
-
+        # Calculate missing features if not present
+        if 'visitor_increase_pct' not in df.columns:
+            # Estimate visitor increase based on attendance vs baseline
+            baseline_daily = df['annual_tourists'] / 365
+            df['visitor_increase_pct'] = ((df['attendance'] / df['duration_days'].clip(lower=1)) / baseline_daily.clip(lower=1) - 1) * 100
+            df['visitor_increase_pct'] = df['visitor_increase_pct'].clip(lower=0, upper=200)
+        
+        if 'price_increase_pct' not in df.columns:
+            # Estimate price increase (typically 0.8x visitor increase)
+            df['price_increase_pct'] = df['visitor_increase_pct'] * 0.8
+            df['price_increase_pct'] = df['price_increase_pct'].clip(lower=0, upper=150)
+        
+        if 'occupancy_boost' not in df.columns:
+            # Estimate occupancy boost (typically 0.3x visitor increase)
+            df['occupancy_boost'] = df['visitor_increase_pct'] * 0.3
+            df['occupancy_boost'] = df['occupancy_boost'].clip(lower=0, upper=50)
+        
         # Create derived features
         df['attendance_per_day'] = df['attendance'] / df['duration_days'].clip(lower=1)
         df['visitors_per_hotel_room'] = df['attendance'] / df['hotel_rooms'].clip(lower=1)
         df['city_tourism_intensity'] = df['annual_tourists'] / df['population'].clip(lower=1)
         df['price_sensitivity'] = df['price_increase_pct'] / df['visitor_increase_pct'].clip(lower=0.1)
-        df['occupancy_boost'] = df['event_occupancy_pct'] - df['baseline_occupancy_pct']
 
         # Encode categorical variables
         if 'event_type' in df.columns:

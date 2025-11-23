@@ -93,8 +93,16 @@ echo "🔍 Checking if sample data exists..."
 if docker-compose exec -T backend python -c "from app.core.database import SessionLocal; from app.models import City; db = SessionLocal(); print(db.query(City).count())" 2>/dev/null | grep -q "6"; then
     echo "  ✓ Sample data already exists"
 else
-    echo "  📊 Generating sample data..."
-    docker-compose exec backend python /data/scripts/generate_sample_data.py
+    echo "  📊 Loading data from historical CSVs..."
+    # First, ensure CSVs exist
+    if docker-compose exec -T backend test -f /data/examples/cities.csv; then
+        echo "  ✓ CSV files found, loading into database..."
+        docker-compose exec backend python /data/scripts/load_from_csvs.py
+    else
+        echo "  ⚠️  CSV files not found, generating them first..."
+        docker-compose exec backend python /data/scripts/generate_historical_csvs.py
+        docker-compose exec backend python /data/scripts/load_from_csvs.py
+    fi
 fi
 
 # Test API

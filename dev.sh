@@ -102,11 +102,22 @@ cd ..
 if [ "$HAS_DATA" = "6" ]; then
     echo "   ✓ Datos ya existen"
 else
-    echo "   Generando datos de muestra..."
-    cd backend
-    source venv/bin/activate
-    python ../data/scripts/generate_sample_data.py
-    cd ..
+    echo "   Cargando datos desde CSVs históricos..."
+    # Verificar si existen los CSVs
+    if [ -f "data/examples/cities.csv" ]; then
+        echo "   ✓ CSVs encontrados, cargando en base de datos..."
+        cd backend
+        source venv/bin/activate
+        python ../data/scripts/load_from_csvs.py
+        cd ..
+    else
+        echo "   ⚠️  CSVs no encontrados, generándolos primero..."
+        cd backend
+        source venv/bin/activate
+        python ../data/scripts/generate_historical_csvs.py
+        python ../data/scripts/load_from_csvs.py
+        cd ..
+    fi
 fi
 
 # ============================================
