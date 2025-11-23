@@ -11,8 +11,27 @@ from app.models import City, Event, EventImpact
 from app.api import schemas
 from app.analytics.impact_analyzer import ImpactAnalyzer
 from app.analytics.scenario_simulator import ScenarioSimulator
+from app.ml.economic_impact_model import EconomicImpactModel
 
 router = APIRouter()
+
+# Initialize ML model (singleton)
+_ml_model = None
+
+
+def get_ml_model() -> EconomicImpactModel:
+    """Get or create ML model instance"""
+    global _ml_model
+    if _ml_model is None:
+        _ml_model = EconomicImpactModel()
+        try:
+            _ml_model.load()
+        except FileNotFoundError:
+            # Model not trained yet, train it
+            _ml_model.load_data()
+            _ml_model.train()
+            _ml_model.save()
+    return _ml_model
 
 
 # ============================================================================
@@ -426,3 +445,104 @@ def get_dashboard_kpis(db: Session = Depends(get_db)):
         "highest_impact_event": highest_impact_event,
         "highest_impact_city": highest_impact_city,
     }
+
+
+# ============================================================================
+# ML Prediction Endpoints
+# ============================================================================
+
+@router.get("/predict/options", response_model=schemas.PredictionOptionsResponse)
+def get_prediction_options():
+    """
+    Get available options for making predictions.
+    Returns list of event types and cities.
+    """
+    model = get_ml_model()
+    return {
+        "event_types": model.get_event_types(),
+        "cities": model.get_cities()
+    }
+
+
+@router.post("/predict", response_model=schemas.PredictionResponse)
+def predict_event_impact(input_data: schemas.PredictionInput):
+    """
+    Predict economic impact for a new event.
+
+    Only requires:
+    - event_type: sports, music, festival, culture, business, fair
+    - city: City name (use /predict/options to see available)
+    - duration_days: Event duration in days
+
+    Optional:
+    - attendance: Expected attendance (auto-estimated if not provided)
+
+    The model uses historical data from similar events to estimate:
+    - visitor increase percentage
+    - hotel price increase percentage
+    - occupancy boost
+
+    Returns predicted economic impact with confidence interval.
+    """
+    model = get_ml_model()
+
+    try:
+        result = model.predict_simple(
+            event_type=input_data.event_type,
+            city=input_data.city,
+            duration_days=input_data.duration_days,
+            attendance=input_data.attendance
+        )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/predict/detailed")
+def predict_event_impact_detailed(
+    event_type: str = Query(..., description="Event type"),
+    city: str = Query(..., description="City name"),
+    duration_days: int = Query(..., ge=1, le=365, description="Duration in days"),
+    attendance: Optional[int] = Query(None, ge=0, description="Expected attendance"),
+    visitor_increase_pct: Optional[float] = Query(None, description="Override visitor increase %"),
+    price_increase_pct: Optional[float] = Query(None, description="Override price increase %"),
+    occupancy_boost: Optional[float] = Query(None, description="Override occupancy boost %")
+):
+    """
+    Detailed prediction with optional parameter overrides.
+
+    Use this endpoint when you have specific data about expected
+    visitor increases, price changes, or occupancy boosts.
+    """
+    model = get_ml_model()
+
+    # Build prediction params
+    params = {
+        'event_type': event_type,
+        'city': city,
+        'duration_days': duration_days,
+    }
+
+    if attendance:
+        params['attendance'] = attendance
+    if visitor_increase_pct:
+        params['visitor_increase_pct'] = visitor_increase_pct
+    if price_increase_pct:
+        params['price_increase_pct'] = price_increase_pct
+    if occupancy_boost:
+        params['occupancy_boost'] = occupancy_boost
+
+    try:
+        # Use predict_simple if no overrides, otherwise use predict directly
+        if any([visitor_increase_pct, price_increase_pct, occupancy_boost]):
+            result = model.predict(params)
+        else:
+            result = model.predict_simple(
+                event_type=event_type,
+                city=city,
+                duration_days=duration_days,
+                attendance=attendance
+            )
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))

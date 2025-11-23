@@ -1,0 +1,35 @@
+event_name,city,event_type,description,start_date,end_date,year,expected_attendance,actual_attendance,venue_name,venue_capacity,is_recurring,recurrence_pattern,edition_number,economic_impact_usd
+London Marathon 2024,London,sports,One of the world's largest marathons with elite runners and charity participants,2024-04-21,2024-04-21,2024,50000,48000,Central London,,1,annual,44,85000000
+London Marathon 2023,London,sports,One of the world's largest marathons,2023-04-23,2023-04-23,2023,48000,47500,Central London,,1,annual,43,73500000
+London Marathon 2022,London,sports,One of the world's largest marathons,2022-10-02,2022-10-02,2022,45000,44000,Central London,,1,annual,42,68000000
+Wimbledon 2024,London,sports,Tennis Grand Slam Championship - The Championships,2024-07-01,2024-07-14,2024,500000,526455,All England Club,42000,1,annual,137,499000000
+Wimbledon 2023,London,sports,Tennis Grand Slam Championship - The Championships,2023-07-03,2023-07-16,2023,490000,532651,All England Club,42000,1,annual,136,480000000
+Wimbledon 2022,London,sports,Tennis Grand Slam Championship - The Championships,2022-06-27,2022-07-10,2022,480000,515000,All England Club,42000,1,annual,135,450000000
+Tokyo Marathon 2024,Tokyo,sports,Major international marathon - World Marathon Majors,2024-03-03,2024-03-03,2024,38000,37500,Tokyo City Center,,1,annual,,95000000
+Tokyo Marathon 2023,Tokyo,sports,Major international marathon - World Marathon Majors,2023-03-05,2023-03-05,2023,38000,36800,Tokyo City Center,,1,annual,,92000000
+Tokyo Game Show 2024,Tokyo,culture,International video game exhibition and convention,2024-09-26,2024-09-29,2024,200000,185000,Makuhari Messe,300000,1,annual,,120000000
+Roland Garros 2024,Paris,sports,French Open Tennis Championship - Grand Slam,2024-05-26,2024-06-09,2024,600000,620000,Stade Roland Garros,15000,1,annual,,380000000
+Roland Garros 2023,Paris,sports,French Open Tennis Championship - Grand Slam,2023-05-28,2023-06-11,2023,580000,610000,Stade Roland Garros,15000,1,annual,,365000000
+Paris Fashion Week 2024,Paris,culture,International fashion event - Haute Couture and Ready-to-Wear,2024-09-23,2024-10-01,2024,100000,105000,Various Venues,,1,biannual,,685000000
+Paris Fashion Week 2023,Paris,culture,International fashion event - Haute Couture and Ready-to-Wear,2023-09-25,2023-10-03,2023,95000,98000,Various Venues,,1,biannual,,650000000
+NYC Marathon 2024,New York,sports,World's largest marathon by number of finishers,2024-11-03,2024-11-03,2024,55000,53000,New York City,,1,annual,,415000000
+NYC Marathon 2023,New York,sports,World's largest marathon by number of finishers,2023-11-05,2023-11-05,2023,53000,51500,New York City,,1,annual,,395000000
+US Open 2024,New York,sports,Tennis Grand Slam Championship,2024-08-26,2024-09-08,2024,850000,890000,USTA Billie Jean King National Tennis Center,23000,1,annual,,520000000
+US Open 2023,New York,sports,Tennis Grand Slam Championship,2023-08-28,2023-09-10,2023,820000,875000,USTA Billie Jean King National Tennis Center,23000,1,annual,,498000000
+Champions League Final 2024,London,sports,UEFA Champions League Final - Wembley,2024-06-01,2024-06-01,2024,90000,86000,Wembley Stadium,90000,0,,,195000000
+Champions League Final 2023,Istanbul,sports,UEFA Champions League Final,2023-06-10,2023-06-10,2023,75000,72000,Ataturk Olympic Stadium,75000,0,,,175000000
+Champions League Final 2022,Paris,sports,UEFA Champions League Final - Stade de France,2022-05-28,2022-05-28,2022,80000,78000,Stade de France,80000,0,,,185000000
+Mad Cool Festival 2024,Madrid,music,International music festival with major artists,2024-07-10,2024-07-13,2024,240000,252000,Valdebebas - IFEMA,,1,annual,,95000000
+Mad Cool Festival 2023,Madrid,music,International music festival with major artists,2023-07-06,2023-07-08,2023,200000,215000,Valdebebas - IFEMA,,1,annual,,82000000
+Berlin Marathon 2024,Berlin,sports,World record marathon course - fastest marathon,2024-09-29,2024-09-29,2024,50000,49500,Berlin City Center,,1,annual,,78000000
+Berlin Marathon 2023,Berlin,sports,World record marathon course - fastest marathon,2023-09-24,2023-09-24,2023,48000,47800,Berlin City Center,,1,annual,,75000000
+Berlin Festival of Lights 2024,Berlin,festival,Light art festival - illuminated landmarks,2024-10-04,2024-10-13,2024,2000000,2100000,Various Berlin Landmarks,,1,annual,,45000000
+Rio Carnival 2024,Rio de Janeiro,festival,World's largest carnival celebration,2024-02-09,2024-02-17,2024,2000000,2200000,Sambadrome and City,,1,annual,,1200000000
+Rio Carnival 2023,Rio de Janeiro,festival,World's largest carnival celebration,2023-02-17,2023-02-25,2023,1800000,1950000,Sambadrome and City,,1,annual,,1050000000
+São Paulo F1 Grand Prix 2024,São Paulo,sports,Formula 1 Brazilian Grand Prix,2024-11-03,2024-11-03,2024,150000,145000,Interlagos Circuit,150000,1,annual,,280000000
+São Paulo F1 Grand Prix 2023,São Paulo,sports,Formula 1 Brazilian Grand Prix,2023-11-05,2023-11-05,2023,145000,142000,Interlagos Circuit,150000,1,annual,,265000000
+Singapore F1 Grand Prix 2024,Singapore,sports,Formula 1 Singapore Grand Prix - Night Race,2024-09-22,2024-09-22,2024,300000,295000,Marina Bay Street Circuit,,1,annual,,350000000
+Dubai Expo 2024,Dubai,fair,World Expo continuation events and attractions,2024-01-01,2024-03-31,2024,5000000,4800000,Expo City Dubai,,0,,,980000000
+Sydney Festival 2024,Sydney,festival,Annual arts festival - music theatre and visual arts,2024-01-06,2024-01-28,2024,500000,520000,Various Sydney Venues,,1,annual,,125000000
+Amsterdam Dance Event 2024,Amsterdam,music,World's largest club festival and conference,2024-10-16,2024-10-20,2024,450000,465000,Various Amsterdam Venues,,1,annual,,85000000
+Mobile World Congress 2024,Barcelona,business,World's largest mobile industry conference,2024-02-26,2024-02-29,2024,95000,101000,Fira Barcelona,120000,1,annual,,580000000

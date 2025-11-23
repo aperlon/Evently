@@ -19,6 +19,9 @@ openpyxl==3.1.2  # For reading Excel files
 scikit-learn==1.4.0
 scipy==1.11.4
 statsmodels==0.14.1
+prophet==1.1.5  # Facebook's forecasting tool (time series)
+xgboost==2.0.3  # Gradient boosting (optional, for future improvements)
+joblib==1.3.2  # Model persistence
 
 # HTTP Client
 httpx==0.26.0

@@ -295,3 +295,72 @@ class PaginatedResponse(BaseModel):
     page_size: int
     total_pages: int
     items: List[Any]
+
+
+# ============================================================================
+# ML Prediction Schemas
+# ============================================================================
+
+class PredictionInput(BaseModel):
+    """Input for economic impact prediction"""
+    event_type: str = Field(..., description="Type: sports, music, festival, culture, business, fair")
+    city: str = Field(..., description="City name from available cities")
+    duration_days: int = Field(..., ge=1, le=365, description="Event duration in days")
+    attendance: Optional[int] = Field(None, ge=0, description="Expected attendance (optional)")
+
+
+class PredictionBreakdown(BaseModel):
+    """Economic impact breakdown"""
+    direct_spending_usd: float
+    indirect_spending_usd: float
+    induced_spending_usd: float
+
+
+class PredictionEstimates(BaseModel):
+    """Additional estimates"""
+    jobs_created: int
+    roi_ratio: float
+    estimated_event_cost_usd: float
+
+
+class HistoricalReference(BaseModel):
+    """Historical data used for prediction"""
+    reference_scope: str
+    events_analyzed: int
+    avg_visitor_increase_pct: float
+    avg_price_increase_pct: float
+    avg_occupancy_boost_pct: float
+    avg_attendance_per_day: int
+    avg_impact_per_day_usd: int
+    similar_events: List[str]
+
+
+class PredictionResult(BaseModel):
+    """Main prediction result"""
+    total_economic_impact_usd: float
+    lower_bound_usd: float
+    upper_bound_usd: float
+    confidence_level: str
+
+
+class PredictionResponse(BaseModel):
+    """Full prediction response"""
+    prediction: PredictionResult
+    breakdown: PredictionBreakdown
+    estimates: PredictionEstimates
+    historical_reference: HistoricalReference
+    model_info: Dict[str, Any]
+    input_summary: Dict[str, Any]
+
+
+class AvailableCity(BaseModel):
+    """Available city for prediction"""
+    name: str
+    country: str
+    continent: str
+
+
+class PredictionOptionsResponse(BaseModel):
+    """Available options for prediction"""
+    event_types: List[str]
+    cities: List[AvailableCity]
