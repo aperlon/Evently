@@ -5,6 +5,7 @@ import EventsList from './pages/EventsList'
 import EventDetails from './pages/EventDetails'
 import CitiesComparison from './pages/CitiesComparison'
 import WhatIfSimulator from './pages/WhatIfSimulator'
+import EventPredictor from './pages/EventPredictor'
 import AboutUs from './pages/AboutUs'
 import Methodology from './pages/Methodology'
 import CaseStudies from './pages/CaseStudies'
@@ -33,6 +34,9 @@ function Layout({ children }: { children: React.ReactNode }) {
               </Link>
               <Link to="/compare" className="text-gray-700 hover:text-primary-600">
                 Compare
+              </Link>
+              <Link to="/predict" className="text-gray-700 hover:text-primary-600">
+                Predict
               </Link>
               <Link to="/about" className="text-gray-700 hover:text-primary-600">
                 About
@@ -79,6 +83,7 @@ function AppRoutes() {
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/compare" element={<CitiesComparison />} />
         <Route path="/simulator" element={<WhatIfSimulator />} />
+        <Route path="/predict" element={<EventPredictor />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/methodology" element={<Methodology />} />
         <Route path="/case-studies" element={<CaseStudies />} />

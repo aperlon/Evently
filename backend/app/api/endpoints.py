@@ -1,13 +1,14 @@
 """
 API endpoints for Evently
 """
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.models import City, Event, EventImpact
+from app.analytics.impact_analyzer import ImpactAnalyzer
 from app.api import schemas
 from app.analytics.impact_analyzer import ImpactAnalyzer
 from app.analytics.scenario_simulator import ScenarioSimulator
@@ -26,11 +27,26 @@ def get_ml_model() -> EconomicImpactModel:
         _ml_model = EconomicImpactModel()
         try:
             _ml_model.load()
-        except FileNotFoundError:
-            # Model not trained yet, train it
-            _ml_model.load_data()
-            _ml_model.train()
-            _ml_model.save()
+            # Verify model is actually loaded
+            if _ml_model.best_model is None:
+                raise FileNotFoundError("Model file exists but is invalid")
+        except (FileNotFoundError, Exception) as e:
+            # Model not trained yet or invalid, train it
+            print(f"⚠️  Model not found or invalid: {e}")
+            print("🔄 Training model from CSV data...")
+            try:
+                _ml_model.load_data()
+                _ml_model.train()
+                _ml_model.save()
+                print("✅ Model trained and saved successfully")
+            except Exception as train_error:
+                print(f"❌ Error training model: {train_error}")
+                raise ValueError(f"Could not train model: {train_error}")
+    
+    # Double check model is ready
+    if _ml_model.best_model is None:
+        raise ValueError("Model is not trained. Please ensure CSV data exists and run training.")
+    
     return _ml_model
 
 
@@ -392,10 +408,37 @@ def get_dashboard_kpis(db: Session = Depends(get_db)):
     # Get all impacts
     impacts = db.query(EventImpact).all()
 
+    # If no impacts exist, calculate them for all events
     if not impacts:
-        raise HTTPException(
-            status_code=404,
-            detail="No impact data available yet"
+        analyzer = ImpactAnalyzer(db)
+        events = db.query(Event).all()
+        for event in events:
+            try:
+                impact = analyzer.calculate_event_impact(event.id)
+                if impact:
+                    # Check if impact already exists
+                    existing = db.query(EventImpact).filter(
+                        EventImpact.event_id == event.id
+                    ).first()
+                    if not existing:
+                        db.add(impact)
+            except Exception:
+                pass  # Skip events that can't be analyzed
+        
+        db.commit()
+        impacts = db.query(EventImpact).all()
+    
+    # If still no impacts, return default values
+    if not impacts:
+        return schemas.DashboardKPIs(
+            total_events_analyzed=total_events,
+            total_cities=total_cities,
+            avg_economic_impact_per_event_usd=0,
+            avg_visitor_increase_pct=0,
+            avg_hotel_price_increase_pct=0,
+            total_jobs_created=0,
+            highest_impact_event_name="No events analyzed yet",
+            highest_impact_city="N/A"
         )
 
     # Calculate averages
@@ -431,20 +474,24 @@ def get_dashboard_kpis(db: Session = Depends(get_db)):
         Event.city_id
     ).order_by(func.sum(EventImpact.total_economic_impact_usd).desc()).first()
 
-    highest_impact_city = db.query(City).filter(
-        City.id == city_impacts[0]
-    ).first()
+    highest_impact_city_name = "N/A"
+    if city_impacts:
+        highest_impact_city = db.query(City).filter(
+            City.id == city_impacts[0]
+        ).first()
+        if highest_impact_city:
+            highest_impact_city_name = highest_impact_city.name
 
-    return {
-        "total_events_analyzed": total_events,
-        "total_cities": total_cities,
-        "avg_economic_impact_per_event_usd": round(avg_economic_impact, 2),
-        "avg_visitor_increase_pct": round(avg_visitor_increase, 2),
-        "avg_hotel_price_increase_pct": round(avg_price_increase, 2),
-        "total_jobs_created": int(total_jobs),
-        "highest_impact_event": highest_impact_event,
-        "highest_impact_city": highest_impact_city,
-    }
+    return schemas.DashboardKPIs(
+        total_events_analyzed=total_events,
+        total_cities=total_cities,
+        avg_economic_impact_per_event_usd=round(avg_economic_impact, 2),
+        avg_visitor_increase_pct=round(avg_visitor_increase, 2),
+        avg_hotel_price_increase_pct=round(avg_price_increase, 2),
+        total_jobs_created=int(total_jobs),
+        highest_impact_event_name=highest_impact_event.name if highest_impact_event else "N/A",
+        highest_impact_city=highest_impact_city_name
+    )
 
 
 # ============================================================================
@@ -484,9 +531,17 @@ def predict_event_impact(input_data: schemas.PredictionInput):
 
     Returns predicted economic impact with confidence interval.
     """
-    model = get_ml_model()
-
     try:
+        model = get_ml_model()
+        
+        # Double check model is ready
+        if model.best_model is None:
+            # Try to train it now
+            print("⚠️  Model not ready, attempting to train...")
+            model.load_data()
+            model.train()
+            model.save()
+        
         result = model.predict_simple(
             event_type=input_data.event_type,
             city=input_data.city,
@@ -496,6 +551,8 @@ def predict_event_impact(input_data: schemas.PredictionInput):
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error making prediction: {str(e)}")
 
 
 @router.post("/predict/detailed")

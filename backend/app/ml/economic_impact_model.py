@@ -47,6 +47,7 @@ class EconomicImpactModel:
             possible_paths = [
                 Path(__file__).parent.parent.parent / "data" / "examples",
                 Path.cwd() / "data" / "examples",
+                Path("/data/examples"),  # Docker path
                 Path("/home/user/Evently/data/examples"),
             ]
             for path in possible_paths:
@@ -55,6 +56,10 @@ class EconomicImpactModel:
                     break
 
         self.data_dir = Path(data_dir) if data_dir else Path("data/examples")
+        
+        # Debug: print data directory
+        print(f"📂 EconomicImpactModel initialized with data_dir: {self.data_dir}")
+        print(f"   Data dir exists: {self.data_dir.exists()}")
         self.models_dir = Path(__file__).parent / "saved_models"
         self.models_dir.mkdir(exist_ok=True)
 
@@ -119,84 +124,42 @@ class EconomicImpactModel:
             how='left'
         )
 
-        # Get event type from events.csv or use from event_impacts.csv
+        # Get event type - it's already in event_impacts.csv, but if not, get from events.csv
         if 'event_type' not in df.columns:
             event_types = self.df_events[['event_name', 'event_type']].drop_duplicates()
-            # Match by event name prefix (remove year)
-            df['event_base_name'] = df['event_name'].str.replace(r'\s*\d{4}$', '', regex=True)
-            event_types['event_base_name'] = event_types['event_name'].str.replace(r'\s*\d{4}$', '', regex=True)
-
             df = df.merge(
-                event_types[['event_base_name', 'event_type']].drop_duplicates(),
-                on='event_base_name',
+                event_types[['event_name', 'event_type']],
+                on='event_name',
                 how='left'
             )
-            # If still missing, try direct merge by event_name
-            if df['event_type'].isna().any():
-                df = df.merge(
-                    self.df_events[['event_name', 'event_type']].drop_duplicates(),
-                    on='event_name',
-                    how='left',
-                    suffixes=('', '_direct')
-                )
-                if 'event_type_direct' in df.columns:
-                    df['event_type'] = df['event_type'].fillna(df['event_type_direct'])
-        
-        # Ensure event_type exists, fill with 'other' if missing
-        if 'event_type' not in df.columns or df['event_type'].isna().any():
-            df['event_type'] = df.get('event_type', 'other').fillna('other')
 
-        # Get attendance from impacts (use 'attendance' column if available)
+        # Get duration_days from event_impacts.csv (it's already there)
+        # If not present, calculate from events.csv
+        if 'duration_days' not in df.columns:
+            events_duration = self.df_events[['event_name', 'start_date', 'end_date']].copy()
+            events_duration['start_date'] = pd.to_datetime(events_duration['start_date'])
+            events_duration['end_date'] = pd.to_datetime(events_duration['end_date'])
+            events_duration['duration_days'] = (events_duration['end_date'] - events_duration['start_date']).dt.days + 1
+
+            df = df.merge(
+                events_duration[['event_name', 'duration_days']],
+                on='event_name',
+                how='left'
+            )
+            # Fill missing duration_days with 1 as default
+            df['duration_days'] = df['duration_days'].fillna(1)
+
+        # Get attendance from impacts CSV (it's already there)
         if 'attendance' not in df.columns:
-            if 'additional_visitors' in df.columns:
-                # Will calculate after getting duration_days
-                pass
-            else:
-                # Use duration_days from event_impacts.csv if available
-                if 'duration_days' in df.columns:
-                    df['attendance'] = (df.get('annual_tourists', 10000000) / 365) * df['duration_days']
-                else:
-                    # Default to 1 day if no duration
-                    df['attendance'] = df.get('annual_tourists', 10000000) / 365
-
-        # Calculate duration from events.csv (merge after getting attendance)
-        events_duration = self.df_events[['event_name', 'start_date', 'end_date']].copy()
-        events_duration['start_date'] = pd.to_datetime(events_duration['start_date'])
-        events_duration['end_date'] = pd.to_datetime(events_duration['end_date'])
-        events_duration['duration_days'] = (events_duration['end_date'] - events_duration['start_date']).dt.days + 1
-
-        df = df.merge(
-            events_duration[['event_name', 'duration_days']],
-            on='event_name',
-            how='left'
-        )
-        
-        # If duration_days still missing, use from event_impacts.csv or default to 1
-        if 'duration_days' not in df.columns or df['duration_days'].isna().all():
-            # Try to get from event_impacts.csv
-            if 'duration_days' in self.df_impacts.columns:
-                df = df.merge(
-                    self.df_impacts[['event_name', 'duration_days']],
-                    on='event_name',
-                    how='left',
-                    suffixes=('', '_impacts')
-                )
-                if 'duration_days_impacts' in df.columns:
-                    df['duration_days'] = df['duration_days'].fillna(df['duration_days_impacts'])
-        
-        # Fill missing duration_days with 1
-        df['duration_days'] = df['duration_days'].fillna(1)
-        
-        # Now calculate attendance if still missing
-        if 'attendance' not in df.columns or df['attendance'].isna().any():
+            # If attendance is not in the merged data, try to calculate it
             if 'additional_visitors' in df.columns:
                 df['attendance'] = df['additional_visitors'].fillna(
-                    (df.get('annual_tourists', 10000000) / 365) * df['duration_days']
+                    df.get('baseline_daily_visitors', 10000) * df.get('visitor_increase_pct', 20) / 100 * df['duration_days'].clip(lower=1)
                 )
             else:
-                # Estimate from annual tourists
-                df['attendance'] = (df.get('annual_tourists', 10000000) / 365) * df['duration_days']
-
+                # Estimate from annual tourists and duration
+                df['attendance'] = (df['annual_tourists'] / 365) * df['duration_days'].clip(lower=1)
+        
         # Calculate missing features if not present
         if 'visitor_increase_pct' not in df.columns:
             # Estimate visitor increase based on attendance vs baseline
@@ -205,20 +168,20 @@ class EconomicImpactModel:
             df['visitor_increase_pct'] = df['visitor_increase_pct'].clip(lower=0, upper=200)
         
         if 'price_increase_pct' not in df.columns:
-            # Estimate price increase (typically 0.8x visitor increase)
-            df['price_increase_pct'] = df['visitor_increase_pct'] * 0.8
+            df['price_increase_pct'] = df['visitor_increase_pct'] * 0.8  # Heuristic
             df['price_increase_pct'] = df['price_increase_pct'].clip(lower=0, upper=150)
-        
+
         if 'occupancy_boost' not in df.columns:
-            # Estimate occupancy boost (typically 0.3x visitor increase)
-            df['occupancy_boost'] = df['visitor_increase_pct'] * 0.3
-            df['occupancy_boost'] = df['occupancy_boost'].clip(lower=0, upper=50)
-        
+            if 'event_occupancy_pct' in df.columns and 'baseline_occupancy_pct' in df.columns:
+                df['occupancy_boost'] = df['event_occupancy_pct'] - df['baseline_occupancy_pct']
+            else:
+                df['occupancy_boost'] = df['visitor_increase_pct'] * 0.3  # Heuristic
+            df['occupancy_boost'] = df['occupancy_boost'].clip(lower=0, upper=25)
+
         # Create derived features
         df['attendance_per_day'] = df['attendance'] / df['duration_days'].clip(lower=1)
         df['visitors_per_hotel_room'] = df['attendance'] / df['hotel_rooms'].clip(lower=1)
         df['city_tourism_intensity'] = df['annual_tourists'] / df['population'].clip(lower=1)
-        df['price_sensitivity'] = df['price_increase_pct'] / df['visitor_increase_pct'].clip(lower=0.1)
 
         # Encode categorical variables
         if 'event_type' in df.columns:
@@ -226,6 +189,10 @@ class EconomicImpactModel:
             df['event_type_encoded'] = self.label_encoders['event_type'].fit_transform(
                 df['event_type'].fillna('other')
             )
+        else:
+            # If event_type is missing, create a default encoding
+            df['event_type_encoded'] = 0
+            print("⚠️  Warning: event_type not found, using default encoding")
 
         # Define feature columns
         self.feature_columns = [
@@ -252,10 +219,22 @@ class EconomicImpactModel:
         # Keep only rows with target variable
         df = df[df[self.target_column].notna()]
 
+        # Ensure all feature columns exist
+        for col in self.feature_columns:
+            if col not in df.columns:
+                print(f"⚠️  Warning: Feature '{col}' not found, creating default value")
+                if col == 'event_type_encoded':
+                    df[col] = 0
+                else:
+                    df[col] = 0.0
+
         # Fill missing values
         for col in self.feature_columns:
             if col in df.columns:
-                df[col] = df[col].fillna(df[col].median())
+                if df[col].dtype in ['int64', 'float64']:
+                    df[col] = df[col].fillna(df[col].median() if len(df[col].dropna()) > 0 else 0)
+                else:
+                    df[col] = df[col].fillna(0)
 
         return df
 
@@ -581,32 +560,70 @@ class EconomicImpactModel:
             reference_scope = f"Global ({len(events_with_cities)} eventos)"
 
         # Calculate averages from historical data
-        avg_visitor_increase = reference_data['visitor_increase_pct'].mean()
-        avg_price_increase = reference_data['price_increase_pct'].mean()
-        avg_occupancy_boost = (reference_data['event_occupancy_pct'] -
-                              reference_data['baseline_occupancy_pct']).mean()
+        # Use attendance and duration_days from event_impacts.csv
+        if 'attendance' in reference_data.columns and 'duration_days' in reference_data.columns:
+            events_with_duration = reference_data.copy()
+            events_with_duration['attendance_per_day'] = (
+                events_with_duration['attendance'] / events_with_duration['duration_days'].clip(lower=1)
+            )
+            avg_attendance_per_day = events_with_duration['attendance_per_day'].mean()
+            avg_impact_per_day = (events_with_duration['total_economic_impact_usd'] /
+                                 events_with_duration['duration_days'].clip(lower=1)).mean()
+        else:
+            # Fallback: get duration from events.csv
+            events_duration = self.df_events[['event_name', 'start_date', 'end_date']].copy()
+            events_duration['start_date'] = pd.to_datetime(events_duration['start_date'])
+            events_duration['end_date'] = pd.to_datetime(events_duration['end_date'])
+            events_duration['duration'] = (events_duration['end_date'] -
+                                           events_duration['start_date']).dt.days + 1
 
-        # Calculate average attendance per day
-        # Get duration info from events dataframe
-        events_duration = self.df_events[['event_name', 'start_date', 'end_date']].copy()
-        events_duration['start_date'] = pd.to_datetime(events_duration['start_date'])
-        events_duration['end_date'] = pd.to_datetime(events_duration['end_date'])
-        events_duration['duration'] = (events_duration['end_date'] -
-                                       events_duration['start_date']).dt.days + 1
+            events_with_duration = reference_data.merge(
+                events_duration[['event_name', 'duration']],
+                on='event_name',
+                how='left'
+            )
+            
+            # Use attendance from impacts if available, otherwise estimate
+            if 'attendance' in events_with_duration.columns:
+                events_with_duration['attendance_per_day'] = (
+                    events_with_duration['attendance'] / events_with_duration['duration'].clip(lower=1)
+                )
+            else:
+                # Estimate from annual tourists
+                events_with_duration['attendance_per_day'] = (
+                    events_with_duration.get('annual_tourists', 10000000) / 365
+                )
+            
+            avg_attendance_per_day = events_with_duration['attendance_per_day'].mean()
+            avg_impact_per_day = (events_with_duration['total_economic_impact_usd'] /
+                                 events_with_duration['duration'].clip(lower=1)).mean()
 
-        # Merge duration with reference data
-        events_with_duration = reference_data.merge(
-            events_duration[['event_name', 'duration']],
-            on='event_name',
-            how='left'
-        )
-        events_with_duration['attendance_per_day'] = (
-            events_with_duration['additional_visitors'] / events_with_duration['duration'].clip(lower=1)
-        )
+        # Calculate visitor_increase_pct if not available
+        if 'visitor_increase_pct' in reference_data.columns:
+            avg_visitor_increase = reference_data['visitor_increase_pct'].mean()
+        else:
+            # Estimate from attendance vs baseline
+            if 'annual_tourists' in events_with_duration.columns:
+                baseline_daily = events_with_duration['annual_tourists'] / 365
+                visitor_increase = ((events_with_duration['attendance_per_day'] / baseline_daily.clip(lower=1)) - 1) * 100
+                avg_visitor_increase = visitor_increase.mean()
+            else:
+                avg_visitor_increase = 50.0  # Default
 
-        avg_attendance_per_day = events_with_duration['attendance_per_day'].mean()
-        avg_impact_per_day = (events_with_duration['total_economic_impact_usd'] /
-                             events_with_duration['duration'].clip(lower=1)).mean()
+        # Calculate price_increase_pct if not available
+        if 'price_increase_pct' in reference_data.columns:
+            avg_price_increase = reference_data['price_increase_pct'].mean()
+        else:
+            # Estimate as 80% of visitor increase
+            avg_price_increase = avg_visitor_increase * 0.8
+
+        # Calculate occupancy_boost if not available
+        if 'event_occupancy_pct' in reference_data.columns and 'baseline_occupancy_pct' in reference_data.columns:
+            avg_occupancy_boost = (reference_data['event_occupancy_pct'] -
+                                  reference_data['baseline_occupancy_pct']).mean()
+        else:
+            # Estimate as 30% of visitor increase
+            avg_occupancy_boost = avg_visitor_increase * 0.3
 
         # Handle NaN values (when no matching events found)
         if pd.isna(avg_attendance_per_day):
@@ -616,7 +633,7 @@ class EconomicImpactModel:
         if pd.isna(avg_price_increase):
             avg_price_increase = 60.0
         if pd.isna(avg_occupancy_boost):
-            avg_occupancy_boost = 20.0
+            avg_occupancy_boost = 15.0
         if pd.isna(avg_impact_per_day):
             avg_impact_per_day = 50000000
 
@@ -637,6 +654,36 @@ class EconomicImpactModel:
 
         # Get prediction from main model
         result = self.predict(prediction_params)
+
+        # Calculate baseline (normal week without event)
+        # Baseline daily visitors (normal tourism without event)
+        baseline_daily_visitors = city_data['annual_tourists'] / 365
+        # Average spending per visitor per day (normal tourism, lower than event)
+        # Normal tourists spend less than event attendees
+        baseline_daily_spending_per_visitor = 150  # Conservative estimate for normal tourism
+        baseline_daily_spending = baseline_daily_visitors * baseline_daily_spending_per_visitor
+        # Calculate for the same duration as the event
+        baseline_period_spending = baseline_daily_spending * duration_days
+        # Apply economic multiplier (same as event impact: 1.7x)
+        baseline_period_impact = baseline_period_spending * 1.7
+
+        # Calculate comparison metrics
+        event_impact = result['prediction']['total_economic_impact_usd']
+        additional_impact = event_impact - baseline_period_impact
+        impact_multiplier = event_impact / baseline_period_impact if baseline_period_impact > 0 else 0
+        impact_increase_pct = ((event_impact / baseline_period_impact) - 1) * 100 if baseline_period_impact > 0 else 0
+
+        # Add baseline comparison
+        result['baseline_comparison'] = {
+            'baseline_weekly_impact_usd': round(baseline_period_impact, 2),
+            'event_impact_usd': round(event_impact, 2),
+            'additional_impact_usd': round(additional_impact, 2),
+            'impact_multiplier': round(impact_multiplier, 2),
+            'impact_increase_pct': round(impact_increase_pct, 1),
+            'baseline_daily_visitors': int(baseline_daily_visitors),
+            'baseline_daily_spending_usd': round(baseline_daily_spending, 2),
+            'duration_days': duration_days,
+        }
 
         # Add historical context
         result['historical_reference'] = {
@@ -698,24 +745,35 @@ class EconomicImpactModel:
         if not load_path.exists():
             raise FileNotFoundError(f"Model file not found: {load_path}")
 
-        with open(load_path, 'rb') as f:
-            model_data = pickle.load(f)
+        try:
+            with open(load_path, 'rb') as f:
+                model_data = pickle.load(f)
 
-        self.best_model = model_data['best_model']
-        self.best_model_name = model_data['best_model_name']
-        self.models = model_data['all_models']
-        self.scaler = model_data['scaler']
-        self.label_encoders = model_data['label_encoders']
-        self.feature_columns = model_data['feature_columns']
-        self.metrics = model_data['metrics']
+            self.best_model = model_data.get('best_model')
+            self.best_model_name = model_data.get('best_model_name')
+            self.models = model_data.get('all_models', {})
+            self.scaler = model_data.get('scaler')
+            self.label_encoders = model_data.get('label_encoders', {})
+            self.feature_columns = model_data.get('feature_columns', [])
+            self.metrics = model_data.get('metrics', {})
 
-        # Load CSVs for city lookups
-        self.df_cities = pd.read_csv(self.data_dir / "cities.csv")
+            # Verify model was loaded correctly
+            if self.best_model is None:
+                raise ValueError("Model file exists but best_model is None")
 
-        print(f"\n📂 Model loaded from: {load_path}")
-        print(f"   Best model: {self.best_model_name}")
-        print(f"   R² Score: {self.metrics[self.best_model_name]['r2']:.4f}")
-        print(f"   Trained at: {model_data.get('trained_at', 'Unknown')}")
+            # Load CSVs for city lookups
+            if self.data_dir.exists():
+                self.df_cities = pd.read_csv(self.data_dir / "cities.csv")
+            else:
+                print(f"⚠️  Warning: Data directory {self.data_dir} does not exist")
+
+            print(f"\n📂 Model loaded from: {load_path}")
+            print(f"   Best model: {self.best_model_name}")
+            if self.best_model_name and self.best_model_name in self.metrics:
+                print(f"   R² Score: {self.metrics[self.best_model_name]['r2']:.4f}")
+            print(f"   Trained at: {model_data.get('trained_at', 'Unknown')}")
+        except Exception as e:
+            raise ValueError(f"Error loading model from {load_path}: {str(e)}")
 
     def get_model_summary(self) -> str:
         """Get a summary of the trained model."""

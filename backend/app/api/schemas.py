@@ -265,8 +265,8 @@ class DashboardKPIs(BaseModel):
     avg_visitor_increase_pct: float
     avg_hotel_price_increase_pct: float
     total_jobs_created: int
-    highest_impact_event: EventResponse
-    highest_impact_city: CityResponse
+    highest_impact_event_name: Optional[str] = "N/A"
+    highest_impact_city: Optional[str] = "N/A"
 
 
 # ============================================================================
@@ -335,6 +335,18 @@ class HistoricalReference(BaseModel):
     similar_events: List[str]
 
 
+class BaselineComparison(BaseModel):
+    """Comparison with baseline (normal week without event)"""
+    baseline_weekly_impact_usd: float
+    event_impact_usd: float
+    additional_impact_usd: float
+    impact_multiplier: float
+    impact_increase_pct: float
+    baseline_daily_visitors: int
+    baseline_daily_spending_usd: float
+    duration_days: int
+
+
 class PredictionResult(BaseModel):
     """Main prediction result"""
     total_economic_impact_usd: float
@@ -348,7 +360,8 @@ class PredictionResponse(BaseModel):
     prediction: PredictionResult
     breakdown: PredictionBreakdown
     estimates: PredictionEstimates
-    historical_reference: HistoricalReference
+    historical_reference: Optional[HistoricalReference] = None
+    baseline_comparison: Optional[BaselineComparison] = None
     model_info: Dict[str, Any]
     input_summary: Dict[str, Any]
 

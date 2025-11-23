@@ -58,6 +58,8 @@ export interface DashboardKPIs {
   avg_visitor_increase_pct: number
   avg_hotel_price_increase_pct: number
   total_jobs_created: number
+  highest_impact_event_name?: string
+  highest_impact_city?: string
 }
 
 // API Functions
@@ -149,6 +151,22 @@ export const apiService = {
         end_date: endDate,
       },
     })
+    return response.data
+  },
+
+  // Prediction
+  predictEvent: async (params: {
+    event_type: string
+    city: string
+    duration_days: number
+    attendance?: number
+  }) => {
+    const response = await api.post('/predict', params)
+    return response.data
+  },
+
+  getPredictionOptions: async () => {
+    const response = await api.get('/predict/options')
     return response.data
   },
 }
