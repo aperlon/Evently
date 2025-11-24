@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
-import { apiService, Event } from '../services/api'
+import { apiService } from '../services/api'
 import { format } from 'date-fns'
 
 function EventsList() {
