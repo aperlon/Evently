@@ -8,7 +8,7 @@ function WhatIfSimulator() {
 
   const { data: events } = useQuery({
     queryKey: ['events'],
-    queryFn: apiService.getEvents,
+    queryFn: () => apiService.getEvents(),
   })
 
   return (

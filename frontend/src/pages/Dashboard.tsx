@@ -4,7 +4,7 @@ import { apiService } from '../services/api'
 function Dashboard() {
   const { data: kpis, isLoading, error } = useQuery({
     queryKey: ['dashboardKPIs'],
-    queryFn: apiService.getDashboardKPIs,
+    queryFn: () => apiService.getDashboardKPIs(),
   })
 
   if (isLoading) {

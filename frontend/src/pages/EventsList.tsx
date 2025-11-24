@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 function EventsList() {
   const { data: events, isLoading, error } = useQuery({
     queryKey: ['events'],
-    queryFn: apiService.getEvents,
+    queryFn: () => apiService.getEvents(),
   })
 
   if (isLoading) {

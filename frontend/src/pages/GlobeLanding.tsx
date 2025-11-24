@@ -21,7 +21,7 @@ function GlobeLanding() {
   // Fetch cities
   const { data: cities, isLoading } = useQuery({
     queryKey: ['cities'],
-    queryFn: apiService.getCities,
+    queryFn: () => apiService.getCities(),
   })
 
   // Convert cities to hexagons
