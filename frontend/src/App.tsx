@@ -15,34 +15,38 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm">
+      <header className="bg-gradient-mellow border-b border-mellow-peach shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <Link to="/" className="flex items-center">
-              <h1 className="text-3xl font-bold text-primary-600">Evently</h1>
-              <span className="ml-3 text-sm text-gray-500">Event Impact Analyzer</span>
+            <Link to="/" className="flex items-center gap-3">
+              <img
+                src="/media/IMAGESEVENTLY/LOGOEVENTLY.png"
+                alt="Evently Logo"
+                className="w-10 h-10 object-contain"
+              />
+              <h1 className="text-3xl font-display text-gray-900 leading-tight">Evently</h1>
             </Link>
             <nav className="flex space-x-8">
-              <Link to="/" className="text-gray-700 hover:text-primary-600">
+              <Link to="/" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 Home
               </Link>
-              <Link to="/dashboard" className="text-gray-700 hover:text-primary-600">
+              <Link to="/dashboard" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 Dashboard
               </Link>
-              <Link to="/events" className="text-gray-700 hover:text-primary-600">
+              <Link to="/events" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 Events
               </Link>
-              <Link to="/compare" className="text-gray-700 hover:text-primary-600">
+              <Link to="/compare" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 Compare
               </Link>
-              <Link to="/predict" className="text-gray-700 hover:text-primary-600">
+              <Link to="/predict" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 Predict
               </Link>
-              <Link to="/about" className="text-gray-700 hover:text-primary-600">
+              <Link to="/about" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 About
               </Link>
-              <Link to="/case-studies" className="text-gray-700 hover:text-primary-600">
-                Cases
+              <Link to="/methodology" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
+                Methodology
               </Link>
             </nav>
           </div>
@@ -50,16 +54,18 @@ function Layout({ children }: { children: React.ReactNode }) {
       </header>
 
       {/* Main Content Container with footer background color */}
-      <div className="bg-gradient-to-b from-blue-900 via-blue-950 to-black -mb-px">
-        <main className="w-full bg-white rounded-b-[60px] sm:rounded-b-[80px] lg:rounded-b-[100px]">
+      <div className="bg-gradient-to-br from-mellow-cream to-mellow-ice -mb-px relative">
+        <main className="w-full bg-white rounded-b-[60px] sm:rounded-b-[80px] lg:rounded-b-[100px] relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {children}
           </div>
         </main>
       </div>
 
-      {/* Footer */}
-      <Footer />
+      {/* Footer - positioned behind main with negative margin */}
+      <div className="relative -mt-[60px] sm:-mt-[80px] lg:-mt-[100px] z-0">
+        <Footer />
+      </div>
     </div>
   )
 }
@@ -90,7 +96,7 @@ function AppRoutes() {
         <Route path="/predict" element={<EventPredictor />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/methodology" element={<Methodology />} />
-        <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/case-studies" element={<Methodology />} />
       </Routes>
     </Layout>
   )

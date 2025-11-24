@@ -133,7 +133,7 @@ function EventPredictor() {
         <button
           onClick={handlePredict}
           disabled={isLoading}
-          className="mt-6 w-full md:w-auto px-8 py-3 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="mt-6 w-full md:w-auto px-8 py-3 bg-gradient-mellow text-gray-900 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl border border-mellow-peach"
         >
           {isLoading ? 'Predicting...' : 'Predict Economic Impact'}
         </button>

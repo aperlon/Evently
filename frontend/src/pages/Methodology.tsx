@@ -119,19 +119,19 @@ export default function Methodology() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-sky-50">
       {/* Hero */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-gradient-to-br from-purple-600 via-blue-600 to-purple-800 text-white py-20"
+        className="bg-sky-50 text-gray-900 py-20"
       >
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl font-bold mb-6"
+            className="text-3xl font-display text-gray-900 leading-tight mb-6"
           >
             Our Methodology
           </motion.h1>
@@ -139,7 +139,7 @@ export default function Methodology() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-xl leading-relaxed opacity-90"
+            className="text-gray-800 font-mono"
           >
             Combining Design Thinking with advanced ETL pipelines and analytics to deliver
             comprehensive event impact insights.
@@ -148,7 +148,7 @@ export default function Methodology() {
       </motion.section>
 
       {/* Design Thinking */}
-      <section className="py-16 px-6">
+      <section className="py-16 px-6 bg-sky-50">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -156,8 +156,8 @@ export default function Methodology() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Design Thinking Approach</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-display text-gray-900 leading-tight mb-4">Design Thinking Approach</h2>
+            <p className="text-gray-800 font-mono max-w-3xl mx-auto">
               We apply human-centered Design Thinking to ensure our solution truly meets
               stakeholder needs.
             </p>
@@ -179,8 +179,8 @@ export default function Methodology() {
                   >
                     <phase.icon className={`w-6 h-6 text-${phase.color}-600`} />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{phase.title}</h3>
-                  <p className="text-sm text-gray-600">{phase.description}</p>
+                  <h3 className="text-lg font-display text-gray-900 mb-2">{phase.title}</h3>
+                  <p className="text-sm text-gray-800 font-mono">{phase.description}</p>
                 </div>
                 {idx < designThinkingPhases.length - 1 && (
                   <div className="hidden md:block absolute -right-2 top-1/2 transform -translate-y-1/2 z-10">
@@ -194,7 +194,7 @@ export default function Methodology() {
       </section>
 
       {/* ETL Pipeline */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="py-16 px-6 bg-sky-50">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -202,8 +202,8 @@ export default function Methodology() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">ETL Data Pipeline</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-display text-gray-900 leading-tight mb-4">ETL Data Pipeline</h2>
+            <p className="text-gray-800 font-mono max-w-3xl mx-auto">
               Our robust Extract-Transform-Load pipeline ensures data quality and reliable
               insights.
             </p>
@@ -225,11 +225,11 @@ export default function Methodology() {
                   >
                     <step.icon className="w-8 h-8 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{step.title}</h3>
-                  <p className="text-lg text-gray-600 mb-4">{step.description}</p>
+                  <h3 className="text-2xl font-display text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-lg text-gray-800 font-mono mb-4">{step.description}</p>
                   <ul className="space-y-2">
                     {step.details.map((detail) => (
-                      <li key={detail} className="flex items-start gap-2 text-sm text-gray-600">
+                      <li key={detail} className="flex items-start gap-2 text-sm text-gray-800 font-mono">
                         <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
                         <span>{detail}</span>
                       </li>
@@ -248,7 +248,7 @@ export default function Methodology() {
       </section>
 
       {/* Analytics Engine */}
-      <section className="py-16 px-6">
+      <section className="py-16 px-6 bg-sky-50">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -256,8 +256,8 @@ export default function Methodology() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Analytics Engine</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-display text-gray-900 leading-tight mb-4">Analytics Engine</h2>
+            <p className="text-gray-800 font-mono max-w-3xl mx-auto">
               Comprehensive metrics across multiple dimensions to capture the full impact of
               events.
             </p>
@@ -273,12 +273,12 @@ export default function Methodology() {
                 transition={{ delay: idx * 0.1 }}
                 className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-xl shadow-lg border border-gray-100"
               >
-                <h3 className="text-lg font-bold text-gray-900 mb-4 pb-3 border-b border-gray-200">
+                <h3 className="text-lg font-display text-gray-900 mb-4 pb-3 border-b border-gray-200">
                   {category.category}
                 </h3>
                 <ul className="space-y-2">
                   {category.metrics.map((metric) => (
-                    <li key={metric} className="flex items-start gap-2 text-sm text-gray-600">
+                    <li key={metric} className="flex items-start gap-2 text-sm text-gray-800 font-mono">
                       <TrendingUp className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                       <span>{metric}</span>
                     </li>
@@ -291,7 +291,7 @@ export default function Methodology() {
       </section>
 
       {/* Impact Calculation */}
-      <section className="py-16 px-6 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
+      <section className="py-16 px-6 bg-sky-50 text-gray-900">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -299,107 +299,142 @@ export default function Methodology() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold mb-4">How We Calculate Impact</h2>
-            <p className="text-xl opacity-90">
-              Our proprietary methodology for measuring event impact
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="flex gap-2 justify-center mb-6"
+            >
+              <span className="px-3 py-1 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm">
+                📊 How We Calculate Impact
+              </span>
+            </motion.div>
+            <h2 className="text-3xl font-display text-gray-900 leading-tight mb-4">Our Proprietary Methodology</h2>
+            <p className="text-gray-800 font-mono">
+              Measuring event impact with precision and transparency
             </p>
           </motion.div>
 
-          <div className="bg-white bg-opacity-10 backdrop-blur-md rounded-2xl p-8 border border-white border-opacity-20">
+          <div className="bg-white bg-opacity-60 backdrop-blur-md rounded-2xl p-8 border border-mellow-peach border-opacity-40 shadow-xl">
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-blue-400 rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+                className="flex items-start gap-4"
+              >
+                <span className="px-3 py-1 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm flex-shrink-0">
                   1
-                </div>
+                </span>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">Baseline Period Analysis</h3>
-                  <p className="opacity-90">
+                  <h3 className="text-xl font-display mb-2 text-gray-900">Baseline Period Analysis</h3>
+                  <p className="text-gray-800 font-mono">
                     We analyze 30 days before the event to establish normal patterns in tourism,
                     hotel demand, and economic activity.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-purple-400 rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="flex items-start gap-4"
+              >
+                <span className="px-3 py-1 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm flex-shrink-0">
                   2
-                </div>
+                </span>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">Event Period Measurement</h3>
-                  <p className="opacity-90">
+                  <h3 className="text-xl font-display mb-2 text-gray-900">Event Period Measurement</h3>
+                  <p className="text-gray-800 font-mono">
                     During and after the event, we track actual performance across all key
                     metrics in real-time.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-green-400 rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="flex items-start gap-4"
+              >
+                <span className="px-3 py-1 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm flex-shrink-0">
                   3
-                </div>
+                </span>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">Comparative Analysis</h3>
-                  <p className="opacity-90">
+                  <h3 className="text-xl font-display mb-2 text-gray-900">Comparative Analysis</h3>
+                  <p className="text-gray-800 font-mono">
                     We calculate percentage changes and absolute differences to quantify the
                     event's impact.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="flex items-start gap-4"
+              >
+                <span className="px-3 py-1 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm flex-shrink-0">
                   4
-                </div>
+                </span>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">Economic Multiplier Effects</h3>
-                  <p className="opacity-90">
+                  <h3 className="text-xl font-display mb-2 text-gray-900">Economic Multiplier Effects</h3>
+                  <p className="text-gray-800 font-mono">
                     We apply economic multipliers to estimate direct, indirect, and induced
                     spending effects throughout the local economy.
                   </p>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-8 h-8 bg-red-400 rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+                className="flex items-start gap-4"
+              >
+                <span className="px-3 py-1 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm flex-shrink-0">
                   5
-                </div>
+                </span>
                 <div>
-                  <h3 className="text-xl font-bold mb-2">ROI Calculation</h3>
-                  <p className="opacity-90">
+                  <h3 className="text-xl font-display mb-2 text-gray-900">ROI Calculation</h3>
+                  <p className="text-gray-800 font-mono">
                     Finally, we calculate return on investment by comparing total economic
                     benefits against event costs and public investment.
                   </p>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-6">
+      <section className="py-16 px-6 bg-sky-50">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl font-display text-gray-900 leading-tight mb-6">
               See Our Methodology in Action
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-gray-800 font-mono mb-8">
               Explore real case studies and see how we've analyzed major events worldwide.
             </p>
             <div className="flex gap-4 justify-center">
               <a
-                href="/case-studies"
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
-              >
-                View Case Studies
-              </a>
-              <a
                 href="/dashboard"
-                className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg border-2 border-gray-300 hover:border-blue-600 transition-all"
+                className="px-8 py-4 bg-gradient-mellow text-gray-900 font-semibold rounded-lg hover:opacity-90 shadow-lg hover:shadow-xl transition-all border border-mellow-peach"
               >
                 Try the Platform
               </a>

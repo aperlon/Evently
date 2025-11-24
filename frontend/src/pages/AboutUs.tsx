@@ -58,25 +58,27 @@ export default function AboutUs() {
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white py-20"
+        className="bg-gradient-to-br from-gray-50 to-gray-100 border-b border-gray-200 py-20"
       >
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-5xl font-bold mb-6"
+            className="text-5xl font-display text-gray-900 mb-6"
           >
-            About Evently and us
+            About Evently
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-xl leading-relaxed opacity-90"
+            className="text-xl font-mono leading-relaxed text-gray-800"
           >
-            We transform complex event data into clear, actionable insights that help cities,
-            organizers, and businesses make smarter decisions about major urban events.
+            Evently analyzes the economic and touristic impact of major urban events across
+            global cities. The platform tracks metrics like tourism flows, hotel demand,
+            pricing, economic activity, and mobility patterns to help governments,
+            organizers, and consultants make data-driven decisions.
           </motion.p>
         </div>
       </motion.section>
@@ -84,18 +86,18 @@ export default function AboutUs() {
       {/* Mission & Vision */}
       <section className="py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-6">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
+              className="card bg-gray-50 border border-gray-200"
             >
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                <Target className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-gray-700" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <h2 className="text-3xl font-display text-gray-900 mb-4">Our Mission</h2>
+              <p className="text-gray-700 leading-relaxed font-mono">
                 To democratize access to comprehensive event impact analysis, empowering
                 stakeholders with the data and insights needed to create more successful,
                 sustainable, and economically beneficial urban events worldwide.
@@ -106,13 +108,13 @@ export default function AboutUs() {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
+              className="card bg-gray-50 border border-gray-200"
             >
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                <Globe2 className="w-6 h-6 text-purple-600" />
+              <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                <Globe2 className="w-6 h-6 text-gray-700" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Vision</h2>
-              <p className="text-gray-600 leading-relaxed">
+              <h2 className="text-3xl font-display text-gray-900 mb-4">Our Vision</h2>
+              <p className="text-gray-700 leading-relaxed font-mono">
                 To become the global standard for event impact analysis, helping cities around
                 the world maximize the positive economic and social benefits of major events
                 while minimizing risks and uncertainties.
@@ -131,8 +133,8 @@ export default function AboutUs() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Evently?</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-display text-gray-900 mb-4">Why Choose Evently?</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-mono">
               We combine advanced analytics, Design Thinking methodology, and real-world data
               to deliver insights that actually matter.
             </p>
@@ -146,13 +148,13 @@ export default function AboutUs() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow"
+                className="card bg-gray-50 border border-gray-200 hover:shadow-lg transition-shadow"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mb-4">
-                  <value.icon className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mb-4">
+                  <value.icon className="w-6 h-6 text-gray-700" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{value.title}</h3>
-                <p className="text-gray-600 text-sm">{value.description}</p>
+                <h3 className="text-lg font-display text-gray-900 mb-2">{value.title}</h3>
+                <p className="text-gray-700 text-sm font-mono">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -168,14 +170,14 @@ export default function AboutUs() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Who We Serve</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-4xl font-display text-gray-900 mb-4">Who We Serve</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-mono">
               Evently is designed for decision-makers who need reliable data to plan,
               execute, and evaluate major urban events.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6">
             {targetAudiences.map((audience, idx) => (
               <motion.div
                 key={audience.title}
@@ -183,15 +185,13 @@ export default function AboutUs() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.15 }}
-                className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 hover:border-blue-300 transition-all"
+                className="card bg-gray-50 border border-gray-200 hover:border-gray-300 transition-all"
               >
-                <div
-                  className={`w-14 h-14 bg-${audience.color}-100 rounded-xl flex items-center justify-center mb-4`}
-                >
-                  <audience.icon className={`w-7 h-7 text-${audience.color}-600`} />
+                <div className="w-14 h-14 bg-gray-200 rounded-xl flex items-center justify-center mb-4">
+                  <audience.icon className="w-7 h-7 text-gray-700" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">{audience.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{audience.description}</p>
+                <h3 className="text-2xl font-display text-gray-900 mb-3">{audience.title}</h3>
+                <p className="text-gray-700 leading-relaxed font-mono">{audience.description}</p>
               </motion.div>
             ))}
           </div>
@@ -199,7 +199,7 @@ export default function AboutUs() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-6 bg-gradient-to-br from-blue-600 to-purple-700 text-white">
+      <section className="py-16 px-6 bg-gradient-to-br from-gray-50 to-gray-100 border-t border-b border-gray-200">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -207,13 +207,13 @@ export default function AboutUs() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold mb-4">Impact by Numbers</h2>
-            <p className="text-xl opacity-90">
+            <h2 className="text-4xl font-display text-gray-900 mb-4">Impact by Numbers</h2>
+            <p className="text-xl text-gray-700 font-mono">
               Real results from our comprehensive event analysis platform
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-4 gap-8 text-center">
+          <div className="grid md:grid-cols-4 gap-6 text-center">
             {[
               { value: '$12.4B', label: 'Economic Impact Analyzed' },
               { value: '847K', label: 'Jobs Created' },
@@ -226,9 +226,10 @@ export default function AboutUs() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
+                className="card bg-gray-50 border border-gray-200"
               >
-                <div className="text-5xl font-bold mb-2">{stat.value}</div>
-                <div className="text-lg opacity-80">{stat.label}</div>
+                <div className="text-5xl font-display text-gray-900 mb-2">{stat.value}</div>
+                <div className="text-sm font-mono text-gray-700">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -243,24 +244,24 @@ export default function AboutUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-display text-gray-900 mb-6">
               Ready to Analyze Your Next Event?
             </h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 mb-8 font-mono">
               Join leading cities and organizations using Evently to make data-driven decisions.
             </p>
             <div className="flex gap-4 justify-center">
               <a
                 href="/dashboard"
-                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all"
+                className="px-8 py-4 bg-mellow-peach text-white font-display rounded-lg hover:bg-[#E8945A] hover:shadow-lg transition-all"
               >
                 Get Started
               </a>
               <a
-                href="/case-studies"
-                className="px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg border-2 border-gray-300 hover:border-blue-600 transition-all"
+                href="/methodology"
+                className="px-8 py-4 bg-white text-gray-900 font-display rounded-lg border-2 border-mellow-peach hover:bg-mellow-peach hover:text-white transition-all"
               >
-                View Case Studies
+                View Methodology
               </a>
             </div>
           </motion.div>

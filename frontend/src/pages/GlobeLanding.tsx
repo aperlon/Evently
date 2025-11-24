@@ -1,25 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import Globe from 'react-globe.gl'
+import createGlobe from 'cobe'
 import { motion } from 'framer-motion'
-import { TrendingUp, DollarSign, Users, Globe2 } from 'lucide-react'
+import { TrendingUp, DollarSign, Users, Globe2, Target, Sparkles, ChevronDown } from 'lucide-react'
 import { apiService, City } from '../services/api'
-import * as THREE from 'three'
 
-interface CityPoint {
-  lat: number
-  lng: number
+type MarkerWithCity = {
+  location: [number, number]
+  size: number
   city: City
 }
 
 function GlobeLanding() {
-  const globeEl = useRef<any>()
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const globeRef = useRef<any>(null)
   const [selectedCity, setSelectedCity] = useState<City | null>(null)
-  const [dimensions, setDimensions] = useState({
-    width: window.innerWidth * 0.65,
-    height: window.innerHeight,
-  })
+  const phi = useRef(0)
+  const theta = useRef(0)
 
   // Fetch cities
   const { data: cities, isLoading } = useQuery({
@@ -27,99 +25,93 @@ function GlobeLanding() {
     queryFn: () => apiService.getCities(),
   })
 
-  // Convert cities to points
-  const pointsData: CityPoint[] =
-    cities?.map((city) => ({
-      lat: city.latitude,
-      lng: city.longitude,
-      city,
-    })) || []
+  // Convert cities to COBE markers
+  const markers = useMemo<MarkerWithCity[]>(
+    () =>
+      cities?.map((city) => ({
+        location: [city.latitude, city.longitude] as [number, number],
+        size: 0.1,
+        city,
+      })) || [],
+    [cities]
+  )
 
-  // Create custom pin object (inverted teardrop shape) - 2.5x larger
-  const createPinObject = () => {
-    const group = new THREE.Group()
-    
-    // Create a proper teardrop shape using LatheGeometry
-    // Define the profile of the teardrop (half profile, will be rotated)
-    const points: THREE.Vector2[] = []
-    const segments = 50
-    
-    // Create teardrop profile: circular top, smooth curve to sharp point
-    // This creates a classic location pin shape
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments
-      let x, y
-      
-      if (t < 0.2) {
-        // Top circular section (hemisphere)
-        const localT = t / 0.2
-        const angle = localT * Math.PI / 2
-        x = 2.2 * Math.sin(angle)
-        y = 1.8 - (1.8 * localT)
-      } else {
-        // Body that tapers to a point (smooth curve)
-        const localT = (t - 0.2) / 0.8
-        // Use a smooth easing function for natural teardrop curve
-        const ease = 1 - Math.pow(1 - localT, 2.5)
-        x = 2.2 * (1 - ease)
-        y = 0.0 - (3.7 * localT)
-      }
-      
-      points.push(new THREE.Vector2(Math.max(0.01, x), y))
-    }
-    
-    // Create lathe geometry from the profile
-    const teardropGeometry = new THREE.LatheGeometry(points, 32)
-    const teardropMaterial = new THREE.MeshPhongMaterial({
-      color: '#F3A46C', // Orange color
-      emissive: '#F3A46C',
-      emissiveIntensity: 0.5,
-      shininess: 100,
-      side: THREE.DoubleSide,
-    })
-    const teardrop = new THREE.Mesh(teardropGeometry, teardropMaterial)
-    teardrop.rotation.x = Math.PI // Flip to point down
-    teardrop.position.y = 1.85 // Position so tip is at origin
-    
-    group.add(teardrop)
-    
-    return group
-  }
-
-  // Auto-rotate globe
+  // Initialize COBE globe
   useEffect(() => {
-    if (globeEl.current) {
-      globeEl.current.controls().autoRotate = true
-      globeEl.current.controls().autoRotateSpeed = 0.5
-    }
-  }, [])
+    if (!canvasRef.current || !cities || cities.length === 0) return
 
-  // Handle window resize and update dimensions based on container
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
+    const canvas = canvasRef.current
+    let currentGlobe: any = null
+
+    const initGlobe = () => {
+      if (!containerRef.current) return
+      
+      const rect = containerRef.current.getBoundingClientRect()
+      const width = rect.width * 2
+      const height = rect.height * 2
+      
+      canvas.width = width
+      canvas.height = height
+
+      // Create COBE globe with slow auto-rotation
+      const globe = createGlobe(canvas, {
+        devicePixelRatio: 2,
+        width,
+        height,
+        phi: 0,
+        theta: 0,
+        dark: 0.0, // No dark areas for lighter globe
+        diffuse: 1.8, // More diffuse light for brighter appearance
+        mapSamples: 16000,
+        mapBrightness: 10, // Increased brightness
+        baseColor: [0.85, 0.85, 0.9], // Much lighter gray-blue background
+        markerColor: [0.95, 0.64, 0.42], // Orange color #F3A46C in RGB
+        glowColor: [0.95, 0.64, 0.42],
+        markers: markers.map((m) => ({
+          location: m.location,
+          size: m.size,
+        })),
+        onRender: (state) => {
+          // Slow auto-rotation to see all cities
+          phi.current += 0.0015 // Slower rotation speed
+          state.phi = phi.current
+          state.theta = theta.current
+        },
+      })
+
+      currentGlobe = globe
+      globeRef.current = globe
+    }
+
+    initGlobe()
+
+    // Handle resize
+    const handleResize = () => {
+      if (containerRef.current && canvas && currentGlobe) {
         const rect = containerRef.current.getBoundingClientRect()
-        setDimensions({
-          width: rect.width,
-          height: rect.height,
-        })
+        const newWidth = rect.width * 2
+        const newHeight = rect.height * 2
+        canvas.width = newWidth
+        canvas.height = newHeight
+        currentGlobe.width = newWidth
+        currentGlobe.height = newHeight
       }
     }
-    
-    updateDimensions()
-    window.addEventListener('resize', updateDimensions)
-    
-    // Use ResizeObserver for more accurate container size tracking
-    const resizeObserver = new ResizeObserver(updateDimensions)
+
+    window.addEventListener('resize', handleResize)
+    const resizeObserver = new ResizeObserver(handleResize)
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current)
     }
-    
+
     return () => {
-      window.removeEventListener('resize', updateDimensions)
+      window.removeEventListener('resize', handleResize)
       resizeObserver.disconnect()
+      if (currentGlobe) {
+        currentGlobe.destroy()
+      }
     }
-  }, [])
+  }, [cities, markers])
 
   if (isLoading) {
     return (
@@ -130,7 +122,7 @@ function GlobeLanding() {
   }
 
   return (
-    <div className="flex h-screen bg-black">
+    <div className="flex h-screen bg-sky-50">
       {/* Globe Section */}
       <div 
         ref={containerRef}
@@ -149,7 +141,7 @@ function GlobeLanding() {
               alt="Evently Logo"
               className="w-16 h-16 object-contain"
             />
-            <h1 className="text-6xl font-display text-white leading-tight pt-4">
+            <h1 className="text-6xl font-display text-black leading-tight pt-4">
               Evently
             </h1>
           </motion.div>
@@ -158,7 +150,7 @@ function GlobeLanding() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <p className="text-2xl font-mono text-white mb-6">
+            <p className="text-2xl font-mono text-black mb-6">
               Global Event Impact Analyzer
             </p>
           </motion.div>
@@ -173,7 +165,7 @@ function GlobeLanding() {
             <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-peach border-opacity-30 shadow-lg">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="w-5 h-5 text-mellow-peach" />
-                <span className="text-xs font-mono text-gray-600 uppercase tracking-wide">
+                <span className="text-sm font-mono text-gray-600 uppercase tracking-wide">
                   Total Impact
                 </span>
               </div>
@@ -184,7 +176,7 @@ function GlobeLanding() {
             <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-ice border-opacity-50 shadow-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Users className="w-5 h-5 text-mellow-ice" />
-                <span className="text-xs font-mono text-gray-600 uppercase tracking-wide">
+                <span className="text-sm font-mono text-gray-600 uppercase tracking-wide">
                   Jobs Created
                 </span>
               </div>
@@ -195,7 +187,7 @@ function GlobeLanding() {
             <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-cream border-opacity-50 shadow-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Globe2 className="w-5 h-5 text-mellow-cream" />
-                <span className="text-xs font-mono text-gray-600 uppercase tracking-wide">
+                <span className="text-sm font-mono text-gray-600 uppercase tracking-wide">
                   Cities
                 </span>
               </div>
@@ -206,7 +198,7 @@ function GlobeLanding() {
             <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-peach border-opacity-30 shadow-lg">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="w-5 h-5 text-mellow-peach" />
-                <span className="text-xs font-mono text-gray-600 uppercase tracking-wide">
+                <span className="text-sm font-mono text-gray-600 uppercase tracking-wide">
                   Avg ROI
                 </span>
               </div>
@@ -231,76 +223,36 @@ function GlobeLanding() {
         </div>
 
         {/* Globe */}
-        <div className="absolute inset-0 w-full h-full">
-          <Globe
-            ref={globeEl}
-            width={dimensions.width}
-            height={dimensions.height}
-            globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-            backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-            showAtmosphere={true}
-            atmosphereColor="#3b82f6"
-            atmosphereAltitude={0.15}
-            pointsData={pointsData}
-            pointLat={(d: any) => d.lat}
-            pointLng={(d: any) => d.lng}
-            pointAltitude={0.05}
-            pointRadius={1.2}
-            pointColor={() => '#F3A46C'}
-            pointResolution={8}
-            pointObject={createPinObject}
-            pointLabel={(d: any) => {
-              const city = d.city
-              if (!city) return ''
-              return `
-                <div style="
-                  background: rgba(0, 0, 0, 0.9);
-                  padding: 12px;
-                  border-radius: 8px;
-                  color: white;
-                  font-family: sans-serif;
-                  border: 2px solid #F3A46C;
-                ">
-                  <div style="font-weight: bold; font-size: 16px; margin-bottom: 4px;">
-                    ${city.name}
-                  </div>
-                  <div style="font-size: 12px; opacity: 0.8;">
-                    ${city.country}
-                  </div>
-                  <div style="font-size: 11px; margin-top: 8px; opacity: 0.6;">
-                    Click for details →
-                  </div>
-                </div>
-              `
+        <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+          <div 
+            className="relative w-full h-full"
+            style={{
+              transform: 'scale(0.8) translateX(30%)', // Make the globe 80% of original size and move it more to the right
+              transformOrigin: 'center center',
             }}
-            onPointClick={(point: any) => {
-              const city = point.city
-              if (city) {
-                setSelectedCity(city)
-                // Zoom to city
-                globeEl.current.pointOfView(
-                  {
-                    lat: city.latitude,
-                    lng: city.longitude,
-                    altitude: 2,
-                  },
-                  1000
-                )
-              }
-            }}
-          />
+          >
+            <canvas
+              ref={canvasRef}
+              style={{
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+              }}
+            />
+          </div>
         </div>
 
         {/* Navigation hint */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white text-sm opacity-60">
-          <div className="flex items-center gap-2">
-            <span>🖱️ Drag to rotate</span>
-            <span>•</span>
-            <span>📍 Click pin for city info</span>
-            <span>•</span>
-            <span>🔍 Scroll to zoom</span>
-          </div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="absolute bottom-8 left-8"
+        >
+          <span className="px-4 py-2 bg-mellow-ice bg-opacity-40 border border-mellow-ice rounded-full text-gray-800 text-sm font-mono backdrop-blur-sm whitespace-nowrap inline-flex items-center gap-3">
+            <span>🌍 Select a city from the panel to explore</span>
+          </span>
+        </motion.div>
       </div>
 
       {/* City Info Panel */}
@@ -432,7 +384,7 @@ function GlobeLanding() {
             </div>
           </div>
         ) : (
-          <div className="h-full flex flex-col items-center justify-center p-8 text-center">
+          <div className="h-full flex flex-col items-center justify-center p-8">
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -449,7 +401,7 @@ function GlobeLanding() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-2xl font-display text-gray-900 mb-2"
+              className="text-2xl font-display text-gray-900 mb-2 text-center"
             >
               Welcome to Evently
             </motion.h3>
@@ -457,21 +409,63 @@ function GlobeLanding() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-gray-700 mb-8 max-w-md font-mono"
+              className="text-base text-gray-700 mb-8 max-w-md font-mono text-center"
             >
-              Click on any orange pin on the globe to explore how major events
-              impact tourism, hotels, and local economies in cities worldwide.
+              Select a city from the dropdown to explore how major events
+              impact tourism, hotels, and local economies worldwide.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="space-y-3 w-full max-w-sm mb-6"
+              className="w-full max-w-sm"
+            >
+              <label htmlFor="city-select" className="block text-sm font-mono text-gray-700 mb-2 uppercase tracking-wide">
+                Select a City
+              </label>
+              <div className="relative">
+                <select
+                  id="city-select"
+                  value={selectedCity ? String((selectedCity as City).id) : ''}
+                  onChange={(e) => {
+                    const value = e.target.value
+                    if (value === '') {
+                      setSelectedCity(null)
+                    } else {
+                      const cityId = parseInt(value, 10)
+                      if (!isNaN(cityId) && cities) {
+                        const city = cities.find((c: City) => c.id === cityId)
+                        if (city) {
+                          setSelectedCity(city)
+                        }
+                      }
+                    }
+                  }}
+                  className="w-full px-4 py-3 bg-white bg-opacity-80 backdrop-blur-md border-2 border-mellow-peach border-opacity-50 rounded-xl text-gray-900 font-mono shadow-lg appearance-none hover:border-mellow-peach focus:outline-none focus:ring-2 focus:ring-mellow-peach focus:border-mellow-peach transition-all cursor-pointer"
+                >
+                  <option value="">-- Select a city --</option>
+                  {cities && cities.length > 0 ? cities.map((city: City) => (
+                    <option key={city.id} value={String(city.id)}>
+                      {city.name}, {city.country} ({city.continent})
+                    </option>
+                  )) : (
+                    <option value="" disabled>Loading cities...</option>
+                  )}
+                </select>
+                <ChevronDown className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-mellow-peach pointer-events-none" />
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-8 space-y-3 w-full max-w-sm"
             >
               <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-peach border-opacity-30 shadow-lg text-left">
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">📊</div>
+                  <TrendingUp className="w-5 h-5 text-mellow-peach" />
                   <div>
                     <div className="font-display text-gray-900 mb-1">
                       Real Data Analysis
@@ -485,7 +479,7 @@ function GlobeLanding() {
 
               <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-ice border-opacity-50 shadow-lg text-left">
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">🎯</div>
+                  <Target className="w-5 h-5 text-mellow-ice" />
                   <div>
                     <div className="font-display text-gray-900 mb-1">
                       Event Impact Insights
@@ -499,7 +493,7 @@ function GlobeLanding() {
 
               <div className="bg-white bg-opacity-80 backdrop-blur-md rounded-xl p-4 border border-mellow-cream border-opacity-50 shadow-lg text-left">
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl">🔮</div>
+                  <Sparkles className="w-5 h-5 text-mellow-ice" />
                   <div>
                     <div className="font-display text-gray-900 mb-1">
                       What-If Scenarios
@@ -515,7 +509,7 @@ function GlobeLanding() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               className="mt-8"
             >
               <a
