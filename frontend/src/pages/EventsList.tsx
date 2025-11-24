@@ -38,15 +38,6 @@ function EventsList() {
     )
   }
 
-  const groupedByCity = events?.reduce((acc, event) => {
-    const cityId = event.city_id
-    if (!acc[cityId]) {
-      acc[cityId] = []
-    }
-    acc[cityId].push(event)
-    return acc
-  }, {} as Record<number, Event[]>)
-
   return (
     <div className="space-y-6">
       <div>
