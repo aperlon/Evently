@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { apiService } from '../services/api'
 import { format } from 'date-fns'
+import { getEventImage } from '../config/eventImages'
 
 function EventsList() {
   const { data: events, isLoading, error } = useQuery({
@@ -41,8 +42,8 @@ function EventsList() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold">Events Catalog</h2>
-        <p className="text-gray-600 mt-2">
+        <h2 className="text-3xl font-display">Events Catalog</h2>
+        <p className="text-gray-600 mt-2 font-mono">
           Browse all analyzed events across major cities
         </p>
       </div>
@@ -52,12 +53,23 @@ function EventsList() {
           <Link
             key={event.id}
             to={`/events/${event.id}`}
-            className="card hover:shadow-lg transition-shadow"
+            className="card hover:shadow-xl transition-all overflow-hidden group"
           >
-            <div className="flex justify-between items-start">
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900">{event.name}</h3>
-                <div className="mt-2 flex items-center gap-4 text-sm text-gray-600">
+            <div className="flex gap-4">
+              {/* Event Image */}
+              <div className="w-48 h-32 flex-shrink-0 overflow-hidden rounded-lg">
+                <img
+                  src={getEventImage(event.event_type)}
+                  alt={event.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              </div>
+
+              {/* Event Info */}
+              <div className="flex-1 flex justify-between items-start">
+                <div className="flex-1">
+                  <h3 className="text-xl font-display text-gray-900">{event.name}</h3>
+                  <div className="mt-2 flex items-center gap-4 text-sm text-gray-600 font-mono">
                   <span className="flex items-center">
                     <svg
                       className="w-4 h-4 mr-1"
@@ -95,10 +107,11 @@ function EventsList() {
                   </span>
                 </div>
               </div>
-              <div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 text-primary-800">
-                  {event.event_type}
-                </span>
+                <div>
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-mono font-medium bg-mellow-cream text-gray-800 border border-mellow-peach">
+                    {event.event_type}
+                  </span>
+                </div>
               </div>
             </div>
           </Link>

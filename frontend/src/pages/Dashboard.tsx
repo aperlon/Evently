@@ -33,60 +33,60 @@ function Dashboard() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold text-gray-900">Event Impact Dashboard</h2>
-        <p className="mt-2 text-gray-600">
+        <h2 className="text-3xl font-display text-gray-900">Event Impact Dashboard</h2>
+        <p className="mt-2 text-gray-600 font-mono">
           Overview of economic and touristic impact across major urban events
         </p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="card bg-gradient-to-br from-blue-500 to-blue-600 text-white">
-          <h3 className="text-sm font-medium opacity-90">Total Events Analyzed</h3>
-          <p className="text-4xl font-bold mt-2">{kpis?.total_events_analyzed || 0}</p>
-          <p className="text-sm mt-2 opacity-75">
+        <div className="card bg-gradient-to-br from-mellow-ice to-mellow-cream border border-mellow-ice shadow-lg">
+          <h3 className="text-sm font-mono font-medium text-gray-700">Total Events Analyzed</h3>
+          <p className="text-4xl font-display text-gray-900 mt-2">{kpis?.total_events_analyzed || 0}</p>
+          <p className="text-sm font-mono text-gray-600 mt-2">
             {kpis?.total_cities || 0} cities in system
           </p>
         </div>
 
-        <div className="card bg-gradient-to-br from-green-500 to-green-600 text-white">
-          <h3 className="text-sm font-medium opacity-90">Avg Economic Impact</h3>
-          <p className="text-4xl font-bold mt-2">
+        <div className="card bg-gradient-to-br from-mellow-cream to-mellow-peach border border-mellow-peach shadow-lg">
+          <h3 className="text-sm font-mono font-medium text-gray-700">Avg Economic Impact</h3>
+          <p className="text-4xl font-display text-gray-900 mt-2">
             ${(kpis?.avg_economic_impact_per_event_usd || 0).toLocaleString('en-US', {
               maximumFractionDigits: 0,
             })}
           </p>
-          <p className="text-sm mt-2 opacity-75">Per event</p>
+          <p className="text-sm font-mono text-gray-600 mt-2">Per event</p>
         </div>
 
-        <div className="card bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-          <h3 className="text-sm font-medium opacity-90">Total Jobs Created</h3>
-          <p className="text-4xl font-bold mt-2">
+        <div className="card bg-gradient-to-br from-mellow-peach to-mellow-cream border border-mellow-peach shadow-lg">
+          <h3 className="text-sm font-mono font-medium text-gray-700">Total Jobs Created</h3>
+          <p className="text-4xl font-display text-gray-900 mt-2">
             {(kpis?.total_jobs_created || 0).toLocaleString()}
           </p>
-          <p className="text-sm mt-2 opacity-75">From all events</p>
+          <p className="text-sm font-mono text-gray-600 mt-2">From all events</p>
         </div>
 
-        <div className="card bg-gradient-to-br from-orange-500 to-orange-600 text-white">
-          <h3 className="text-sm font-medium opacity-90">Avg Visitor Increase</h3>
-          <p className="text-4xl font-bold mt-2">
+        <div className="card bg-gradient-to-br from-mellow-ice to-mellow-peach border border-mellow-ice shadow-lg">
+          <h3 className="text-sm font-mono font-medium text-gray-700">Avg Visitor Increase</h3>
+          <p className="text-4xl font-display text-gray-900 mt-2">
             +{(kpis?.avg_visitor_increase_pct || 0).toFixed(1)}%
           </p>
-          <p className="text-sm mt-2 opacity-75">During events</p>
+          <p className="text-sm font-mono text-gray-600 mt-2">During events</p>
         </div>
 
-        <div className="card bg-gradient-to-br from-pink-500 to-pink-600 text-white">
-          <h3 className="text-sm font-medium opacity-90">Avg Hotel Price Increase</h3>
-          <p className="text-4xl font-bold mt-2">
+        <div className="card bg-gradient-to-br from-mellow-cream to-mellow-ice border border-mellow-cream shadow-lg">
+          <h3 className="text-sm font-mono font-medium text-gray-700">Avg Hotel Price Increase</h3>
+          <p className="text-4xl font-display text-gray-900 mt-2">
             +{(kpis?.avg_hotel_price_increase_pct || 0).toFixed(1)}%
           </p>
-          <p className="text-sm mt-2 opacity-75">During events</p>
+          <p className="text-sm font-mono text-gray-600 mt-2">During events</p>
         </div>
 
-        <div className="card bg-gradient-to-br from-indigo-500 to-indigo-600 text-white">
-          <h3 className="text-sm font-medium opacity-90">Cities</h3>
-          <p className="text-4xl font-bold mt-2">{kpis?.total_cities || 0}</p>
-          <p className="text-sm mt-2 opacity-75">Worldwide coverage</p>
+        <div className="card bg-gradient-mellow border border-mellow-peach shadow-lg">
+          <h3 className="text-sm font-mono font-medium text-gray-700">Cities</h3>
+          <p className="text-4xl font-display text-gray-900 mt-2">{kpis?.total_cities || 0}</p>
+          <p className="text-sm font-mono text-gray-600 mt-2">Worldwide coverage</p>
         </div>
       </div>
 

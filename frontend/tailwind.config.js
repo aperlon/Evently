@@ -6,7 +6,18 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'sans': ['system-ui', '-apple-system', 'sans-serif'],
+        'display': ['The Bold Font', 'system-ui', 'sans-serif'], // For large titles & "Evently"
+        'mono': ['VCR OSD Mono', 'monospace'], // For subtitles, footer, small headers
+      },
       colors: {
+        // Mellow Ice Palette - Soft and minimal pastel colors
+        'mellow': {
+          'ice': '#D3EEF4',      // Soft blue
+          'cream': '#F1EEC8',     // Soft yellow/cream
+          'peach': '#F3A46C',     // Soft orange/peach
+        },
         primary: {
           50: '#eff6ff',
           100: '#dbeafe',
@@ -19,6 +30,10 @@ export default {
           800: '#1e40af',
           900: '#1e3a8a',
         },
+      },
+      backgroundImage: {
+        'gradient-mellow': 'linear-gradient(90deg, #D3EEF4, #F1EEC8, #F3A46C)',
+        'gradient-mellow-vertical': 'linear-gradient(180deg, #D3EEF4, #F1EEC8, #F3A46C)',
       },
     },
   },

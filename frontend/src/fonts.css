@@ -1,0 +1,20 @@
+/* Custom Fonts for Evently */
+
+/* VCR OSD Mono - For subtitles, footer, small headers */
+@font-face {
+  font-family: 'VCR OSD Mono';
+  src: url('/media/fonts/footer and subtitle small header font/VCR_OSD_MONO_1.001.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* The Bold Font - For large titles and "Evently" */
+@font-face {
+  font-family: 'The Bold Font';
+  src: url('/media/fonts/THEBOLDFONT-FREEVERSION.woff') format('woff'),
+       url('/media/fonts/THEBOLDFONT-FREEVERSION.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
