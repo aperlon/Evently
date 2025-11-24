@@ -59,7 +59,7 @@ function EventsList() {
               {/* Event Image */}
               <div className="w-48 h-32 flex-shrink-0 overflow-hidden rounded-lg">
                 <img
-                  src={getEventImage(event.event_type)}
+                  src={getEventImage(event.event_type, event.name)}
                   alt={event.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />

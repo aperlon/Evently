@@ -49,10 +49,14 @@ function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
-      </main>
+      {/* Main Content Container with footer background color */}
+      <div className="bg-gradient-to-b from-blue-900 via-blue-950 to-black -mb-px">
+        <main className="w-full bg-white rounded-b-[60px] sm:rounded-b-[80px] lg:rounded-b-[100px]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            {children}
+          </div>
+        </main>
+      </div>
 
       {/* Footer */}
       <Footer />

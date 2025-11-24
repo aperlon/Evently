@@ -11,7 +11,31 @@ export const eventImages: Record<string, string> = {
   'default': '/media/IMAGESEVENTLY/festival.png',
 }
 
-// Get image for event type
-export const getEventImage = (eventType: string): string => {
+// Get image for event based on name and type
+export const getEventImage = (eventType: string, eventName?: string): string => {
+  const name = eventName?.toLowerCase() || ''
+  
+  // Check for specific event names first
+  if (name.includes('marathon')) {
+    return '/media/IMAGESEVENTLY/maraton.jpg'
+  }
+  
+  if (name.includes('wimbledon') || name.includes('champions league') || name.includes('roland garros')) {
+    return '/media/IMAGESEVENTLY/bernabeu.png'
+  }
+  
+  if (name.includes('paris fashion week') || name.includes('mad cool')) {
+    return '/media/IMAGESEVENTLY/concert.jpg'
+  }
+  
+  if (name.includes('design week')) {
+    return '/media/IMAGESEVENTLY/openai.png'
+  }
+  
+  if (name.includes('berlin festival of lights')) {
+    return '/media/IMAGESEVENTLY/lantern.jpg'
+  }
+  
+  // Fallback to event type mapping
   return eventImages[eventType] || eventImages['default']
 }
