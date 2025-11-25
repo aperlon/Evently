@@ -129,23 +129,23 @@ function Dashboard() {
       {/* Info Section */}
       <div className="card bg-gray-50 border border-gray-200 shadow-lg">
         <h2 className="text-3xl font-display text-gray-900">About Evently</h2>
-        <p className="text-gray-700 mt-2">
+        <p className="text-gray-700 mt-2 font-mono">
           Evently analyzes the economic and touristic impact of major urban events across
           global cities. The platform tracks metrics like tourism flows, hotel demand,
           pricing, economic activity, and mobility patterns to help governments,
           organizers, and consultants make data-driven decisions.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm">
+          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm font-mono">
             Tourism Analysis
           </span>
-          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm">
+          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm font-mono">
             Hotel Metrics
           </span>
-          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm">
+          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm font-mono">
             Economic Impact
           </span>
-          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm">
+          <span className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-sm font-mono">
             Mobility Tracking
           </span>
         </div>

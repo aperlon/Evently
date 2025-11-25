@@ -66,7 +66,7 @@ function EventPredictor() {
             <select
               value={eventType}
               onChange={(e) => setEventType(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800"
+              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
             >
               {eventTypes.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -84,7 +84,7 @@ function EventPredictor() {
             <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800"
+              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
             >
               {cities?.map((c) => (
                 <option key={c.id} value={c.name}>
@@ -105,7 +105,7 @@ function EventPredictor() {
               max="365"
               value={durationDays}
               onChange={(e) => setDurationDays(parseInt(e.target.value) || 1)}
-              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800"
+              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
             />
           </div>
 
@@ -120,7 +120,7 @@ function EventPredictor() {
               value={attendance || ''}
               onChange={(e) => setAttendance(e.target.value ? parseInt(e.target.value) : undefined)}
               placeholder="Auto-estimated if not provided"
-              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800"
+              className="w-full px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
             />
             <p className="mt-1 text-sm text-gray-500 font-mono">
               Leave empty to auto-estimate based on similar events
