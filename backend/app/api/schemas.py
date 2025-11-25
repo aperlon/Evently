@@ -319,6 +319,8 @@ class PredictionBreakdown(BaseModel):
 class PredictionEstimates(BaseModel):
     """Additional estimates"""
     jobs_created: int
+    jobs_ratio_usd: Optional[float] = None  # Ratio ajustado por duración: (ratio_base / 250) * duration_days
+    jobs_ratio_base_usd: Optional[float] = None  # Ratio base anual por ciudad (para referencia)
     roi_ratio: float
     estimated_event_cost_usd: float
 

@@ -11,7 +11,7 @@ export default function Footer() {
       links: [
         { name: 'Dashboard', path: '/dashboard' },
         { name: 'Events', path: '/events' },
-        { name: 'Compare', path: '/compare' },
+        { name: 'Portal', path: '/compare' },
         { name: 'Predict', path: '/predict' },
         { name: 'What-If Analysis', path: '/simulator' },
       ],

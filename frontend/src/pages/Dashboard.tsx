@@ -42,16 +42,16 @@ function Dashboard() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="card bg-gray-50 border border-gray-200 shadow-lg">
-          <h3 className="text-sm font-mono font-medium text-gray-700">Total Events Analyzed</h3>
-          <p className="text-4xl font-display text-gray-900 mt-2">{kpis?.total_events_analyzed || 0}</p>
+          <h3 className="text-sm font-display font-medium text-gray-700">Total Events Analyzed</h3>
+          <p className="text-4xl font-mono text-gray-900 mt-2">{kpis?.total_events_analyzed || 0}</p>
           <p className="text-sm font-mono text-gray-600 mt-2">
             {kpis?.total_cities || 0} cities in system
           </p>
         </div>
 
         <div className="card bg-gray-50 border border-gray-200 shadow-lg">
-          <h3 className="text-sm font-mono font-medium text-gray-700">Avg Economic Impact</h3>
-          <p className="text-4xl font-display text-gray-900 mt-2">
+          <h3 className="text-sm font-display font-medium text-gray-700">Avg Economic Impact</h3>
+          <p className="text-4xl font-mono text-gray-900 mt-2">
             ${(kpis?.avg_economic_impact_per_event_usd || 0).toLocaleString('en-US', {
               maximumFractionDigits: 0,
             })}
@@ -60,32 +60,32 @@ function Dashboard() {
         </div>
 
         <div className="card bg-gray-50 border border-gray-200 shadow-lg">
-          <h3 className="text-sm font-mono font-medium text-gray-700">Total Jobs Created</h3>
-          <p className="text-4xl font-display text-gray-900 mt-2">
+          <h3 className="text-sm font-display font-medium text-gray-700">Total Jobs Created</h3>
+          <p className="text-4xl font-mono text-gray-900 mt-2">
             {(kpis?.total_jobs_created || 0).toLocaleString()}
           </p>
           <p className="text-sm font-mono text-gray-600 mt-2">From all events</p>
         </div>
 
         <div className="card bg-gray-50 border border-gray-200 shadow-lg">
-          <h3 className="text-sm font-mono font-medium text-gray-700">Avg Visitor Increase</h3>
-          <p className="text-4xl font-display text-gray-900 mt-2">
+          <h3 className="text-sm font-display font-medium text-gray-700">Avg Visitor Increase</h3>
+          <p className="text-4xl font-mono text-gray-900 mt-2">
             +{(kpis?.avg_visitor_increase_pct || 0).toFixed(1)}%
           </p>
           <p className="text-sm font-mono text-gray-600 mt-2">During events</p>
         </div>
 
         <div className="card bg-gray-50 border border-gray-200 shadow-lg">
-          <h3 className="text-sm font-mono font-medium text-gray-700">Avg Hotel Price Increase</h3>
-          <p className="text-4xl font-display text-gray-900 mt-2">
+          <h3 className="text-sm font-display font-medium text-gray-700">Avg Hotel Price Increase</h3>
+          <p className="text-4xl font-mono text-gray-900 mt-2">
             +{(kpis?.avg_hotel_price_increase_pct || 0).toFixed(1)}%
           </p>
           <p className="text-sm font-mono text-gray-600 mt-2">During events</p>
         </div>
 
         <div className="card bg-gray-50 border border-gray-200 shadow-lg">
-          <h3 className="text-sm font-mono font-medium text-gray-700">Cities</h3>
-          <p className="text-4xl font-display text-gray-900 mt-2">{kpis?.total_cities || 0}</p>
+          <h3 className="text-sm font-display font-medium text-gray-700">Cities</h3>
+          <p className="text-4xl font-mono text-gray-900 mt-2">{kpis?.total_cities || 0}</p>
           <p className="text-sm font-mono text-gray-600 mt-2">Worldwide coverage</p>
         </div>
       </div>
@@ -108,7 +108,7 @@ function Dashboard() {
             href="/compare"
             className="p-4 border border-gray-200 rounded-lg hover:border-primary-500 hover:shadow-md transition-all"
           >
-            <h4 className="font-semibold text-gray-900 font-mono">Compare Cities</h4>
+            <h4 className="font-semibold text-gray-900 font-mono">Portal</h4>
             <p className="text-sm text-gray-600 mt-1 font-mono">
               Compare event impacts across different cities
             </p>

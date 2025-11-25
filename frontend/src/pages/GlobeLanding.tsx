@@ -16,8 +16,30 @@ function GlobeLanding() {
   const containerRef = useRef<HTMLDivElement>(null)
   const globeRef = useRef<any>(null)
   const [selectedCity, setSelectedCity] = useState<City | null>(null)
+  const [globeTransform, setGlobeTransform] = useState('scale(0.8) translateX(30%)')
   const phi = useRef(0)
   const theta = useRef(0)
+
+  // Adjust globe transform based on screen size
+  useEffect(() => {
+    const updateGlobeTransform = () => {
+      const width = window.innerWidth
+      if (width < 768) {
+        // Small screens: hide globe
+        setGlobeTransform('scale(0)')
+      } else if (width < 1024) {
+        // Medium screens: smaller scale, less translation
+        setGlobeTransform('scale(0.6) translateX(20%)')
+      } else {
+        // Large screens: original size
+        setGlobeTransform('scale(0.8) translateX(30%)')
+      }
+    }
+
+    updateGlobeTransform()
+    window.addEventListener('resize', updateGlobeTransform)
+    return () => window.removeEventListener('resize', updateGlobeTransform)
+  }, [])
 
   // Fetch cities
   const { data: cities, isLoading } = useQuery({
@@ -222,12 +244,12 @@ function GlobeLanding() {
           </motion.div>
         </div>
 
-        {/* Globe */}
-        <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+        {/* Globe - Hidden on small screens, visible on medium+ */}
+        <div className="absolute inset-0 w-full h-full hidden md:flex items-center justify-center">
           <div 
             className="relative w-full h-full"
             style={{
-              transform: 'scale(0.8) translateX(30%)', // Make the globe 80% of original size and move it more to the right
+              transform: globeTransform,
               transformOrigin: 'center center',
             }}
           >

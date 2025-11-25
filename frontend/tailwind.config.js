@@ -32,7 +32,7 @@ export default {
         },
       },
       backgroundImage: {
-        'gradient-mellow': 'linear-gradient(90deg, #D3EEF4, #F1EEC8, #F3A46C)',
+        'gradient-mellow': 'linear-gradient(90deg, #FFFFFF, #FFF8F0, #FFE8D6)',
         'gradient-mellow-vertical': 'linear-gradient(180deg, #D3EEF4, #F1EEC8, #F3A46C)',
       },
     },

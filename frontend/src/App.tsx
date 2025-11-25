@@ -14,7 +14,12 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-mellow border-b border-mellow-peach shadow-sm">
+      <header 
+        className="border-b border-mellow-peach/20 shadow-sm"
+        style={{
+          background: 'linear-gradient(90deg, #FFFFFF 0%, #FFF5EB 50%, #FFE5D0 100%)'
+        }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <Link to="/" className="flex items-center gap-3">
@@ -36,7 +41,7 @@ function Layout({ children }: { children: React.ReactNode }) {
                 Events
               </Link>
               <Link to="/compare" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
-                Compare
+                Portal
               </Link>
               <Link to="/predict" className="text-gray-800 hover:text-gray-900 transition-colors font-mono">
                 Predict

@@ -54,13 +54,13 @@ const mockEvents: MockEvent[] = [
   },
   {
     id: 3,
-    name: 'Barcelona Music Festival',
+    name: 'Music Festival',
     type: 'Music',
     category: 'festival',
     date: '2025-07-10',
     expectedAttendance: 80000,
     description: 'Three-day music festival featuring top international artists. Looking for a coastal city with large outdoor venues, excellent weather, and vibrant nightlife scene.',
-    organizer: 'Barcelona Events',
+    organizer: 'International Music Events',
     icon: Music,
     status: 'negotiating',
     cityRequirements: ['Outdoor venue', 'Coastal location', 'Sound permits', 'Camping facilities'],
@@ -70,13 +70,13 @@ const mockEvents: MockEvent[] = [
   },
   {
     id: 4,
-    name: 'London Tech Summit',
+    name: 'Tech Summit',
     type: 'Business',
     category: 'summit',
     date: '2025-04-18',
     expectedAttendance: 12000,
     description: 'Premier technology summit bringing together innovators, entrepreneurs, and investors. Seeking a major metropolitan area with strong tech industry presence and world-class venues.',
-    organizer: 'Tech London',
+    organizer: 'Global Tech Events',
     icon: Building2,
     status: 'seeking',
     cityRequirements: ['Tech ecosystem', 'Convention center', 'Business district', 'International connectivity'],
@@ -86,7 +86,7 @@ const mockEvents: MockEvent[] = [
   },
   {
     id: 5,
-    name: 'Paris Fashion Week',
+    name: 'Fashion Week',
     type: 'Culture',
     category: 'fashion',
     date: '2025-09-25',
@@ -102,13 +102,13 @@ const mockEvents: MockEvent[] = [
   },
   {
     id: 6,
-    name: 'Tokyo Innovation Expo',
+    name: 'Innovation Expo',
     type: 'Business',
     category: 'expo',
     date: '2025-08-05',
     expectedAttendance: 30000,
     description: 'International innovation expo featuring cutting-edge technology and startups. Seeking a forward-thinking city with excellent expo facilities and strong innovation culture.',
-    organizer: 'Tokyo Innovation Hub',
+    organizer: 'Global Innovation Hub',
     icon: TrendingUp,
     status: 'seeking',
     cityRequirements: ['Expo center', 'Innovation hub', 'International access', 'Tech infrastructure'],
@@ -118,7 +118,7 @@ const mockEvents: MockEvent[] = [
   },
   {
     id: 7,
-    name: 'Berlin Startup Weekend',
+    name: 'Startup Weekend',
     type: 'Business',
     category: 'workshop',
     date: '2025-05-10',
@@ -134,7 +134,7 @@ const mockEvents: MockEvent[] = [
   },
   {
     id: 8,
-    name: 'Amsterdam Design Fair',
+    name: 'Design Fair',
     type: 'Culture',
     category: 'fair',
     date: '2025-06-28',
@@ -207,7 +207,7 @@ function CitiesComparison() {
                   placeholder="Search events, organizers, regions, or keywords..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-gray-800 font-mono"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
                 />
               </div>
 
@@ -218,7 +218,7 @@ function CitiesComparison() {
                   <select
                     value={selectedType}
                     onChange={(e) => setSelectedType(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-gray-800 font-mono"
+                    className="px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
                   >
                     {eventTypes.map((type) => (
                       <option key={type} value={type}>
@@ -232,7 +232,7 @@ function CitiesComparison() {
                   <select
                     value={selectedCategory}
                     onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-gray-800 font-mono"
+                    className="px-4 py-2 border border-gray-200 lg:border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 bg-gray-50 lg:bg-white text-gray-700 lg:text-gray-800 font-mono"
                   >
                     {categories.map((category) => (
                       <option key={category} value={category}>
