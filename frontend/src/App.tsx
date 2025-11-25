@@ -8,7 +8,6 @@ import WhatIfSimulator from './pages/WhatIfSimulator'
 import EventPredictor from './pages/EventPredictor'
 import AboutUs from './pages/AboutUs'
 import Methodology from './pages/Methodology'
-import CaseStudies from './pages/CaseStudies'
 import Footer from './components/Footer'
 
 function Layout({ children }: { children: React.ReactNode }) {

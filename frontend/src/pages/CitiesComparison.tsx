@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, Users, TrendingUp, Building2, Music, Trophy, Briefcase, Sparkles, DollarSign, Clock, Search } from 'lucide-react';
+import { Calendar, Users, TrendingUp, Building2, Music, Trophy, Briefcase, Sparkles, DollarSign, Clock, Search } from 'lucide-react';
 
 interface MockEvent {
   id: number;
