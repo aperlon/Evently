@@ -92,6 +92,22 @@ def load_events(db: Session, cities: list):
         }
         event_type = event_type_map.get(event_type_str, EventType.SPORTS)
         
+        raw_rec_pattern = row.get('recurrence_pattern')
+        recurrence_pattern = (
+            str(raw_rec_pattern).strip()
+            if pd.notna(raw_rec_pattern) and str(raw_rec_pattern).strip()
+            else None
+        )
+
+        raw_is_recurring = row.get('is_recurring')
+        if pd.notna(raw_is_recurring):
+            try:
+                is_recurring = bool(int(raw_is_recurring))
+            except (ValueError, TypeError):
+                is_recurring = str(raw_is_recurring).strip().lower() in {"true", "1", "yes"}
+        else:
+            is_recurring = False
+
         event = Event(
             city_id=city.id,
             name=row['event_name'],
@@ -104,8 +120,8 @@ def load_events(db: Session, cities: list):
             actual_attendance=int(row['actual_attendance']) if pd.notna(row['actual_attendance']) else None,
             venue_name=row.get('venue_name', ''),
             venue_capacity=int(row['venue_capacity']) if pd.notna(row.get('venue_capacity')) else None,
-            is_recurring=bool(row.get('is_recurring', False)),
-            recurrence_pattern=row.get('recurrence_pattern', ''),
+            is_recurring=is_recurring,
+            recurrence_pattern=recurrence_pattern,
             edition_number=int(row['edition_number']) if pd.notna(row.get('edition_number')) else None,
         )
         db.add(event)
