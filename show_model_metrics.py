@@ -1,3 +1,4 @@
+python backend/train_model.py
 """
 Script para mostrar métricas del modelo guardado sin necesidad de entrenar
 Usa pickle para cargar el modelo y mostrar sus métricas

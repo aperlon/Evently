@@ -16,10 +16,7 @@ class Settings(BaseSettings):
     DESCRIPTION: str = "API for analyzing economic and touristic impact of urban events"
 
     # CORS
-    BACKEND_CORS_ORIGINS: List[str] = Field(
-        default=["http://localhost:3000", "http://localhost:8000", "https://*.vercel.app"],
-        env="BACKEND_CORS_ORIGINS"
-    )
+    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
 
     # Database
     DATABASE_URL: str = Field(
