@@ -2,14 +2,21 @@
 Analizar features y eliminar redundantes para mejorar el modelo
 """
 import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'backend'))
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BASE_DIR / "backend"))
 
 import pandas as pd
 import numpy as np
 from app.ml.economic_impact_model import EconomicImpactModel
-from sklearn.feature_selection import SelectKBest, f_regression
 from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.feature_selection import SelectKBest, f_regression
+import json
+
+DATA_OUTPUTS = BASE_DIR / "data" / "outputs"
+DATA_OUTPUTS.mkdir(parents=True, exist_ok=True)
+RECOMMENDATIONS_FILE = DATA_OUTPUTS / "feature_recommendations.json"
 
 print("=" * 80)
 print("🔍 ANÁLISIS DE FEATURES Y REDUCCIÓN")
@@ -183,11 +190,10 @@ recommendations = {
     'all_current': model.feature_columns
 }
 
-import json
-with open('feature_recommendations.json', 'w') as f:
+with open(RECOMMENDATIONS_FILE, 'w') as f:
     json.dump(recommendations, f, indent=2)
 
-print("💾 Recomendaciones guardadas en: feature_recommendations.json")
+print(f"💾 Recomendaciones guardadas en: {RECOMMENDATIONS_FILE.relative_to(BASE_DIR)}")
 print()
 print("=" * 80)
 print("✅ ANÁLISIS COMPLETADO")

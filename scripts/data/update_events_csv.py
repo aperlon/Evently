@@ -4,9 +4,10 @@ Actualizar events.csv con los nuevos eventos de event_impacts.csv
 import pandas as pd
 from pathlib import Path
 
-data_dir = Path("data/examples")
-impacts_df = pd.read_csv(data_dir / "event_impacts.csv")
-events_df = pd.read_csv(data_dir / "events.csv")
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data" / "examples"
+impacts_df = pd.read_csv(DATA_DIR / "event_impacts.csv")
+events_df = pd.read_csv(DATA_DIR / "events.csv")
 
 print("=" * 80)
 print("📊 ACTUALIZANDO events.csv")
@@ -54,7 +55,7 @@ for _, impact in impacts_df.iterrows():
 if new_events:
     new_events_df = pd.DataFrame(new_events)
     combined_events = pd.concat([events_df, new_events_df], ignore_index=True)
-    combined_events.to_csv(data_dir / "events.csv", index=False)
+    combined_events.to_csv(DATA_DIR / "events.csv", index=False)
     
     print(f"✅ Añadidos {len(new_events)} nuevos eventos a events.csv")
     print(f"   Total eventos: {len(combined_events)}")

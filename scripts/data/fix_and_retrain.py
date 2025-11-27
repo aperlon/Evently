@@ -6,8 +6,9 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-data_dir = Path("data/examples")
-impacts_df = pd.read_csv(data_dir / "event_impacts.csv")
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data" / "examples"
+impacts_df = pd.read_csv(DATA_DIR / "event_impacts.csv")
 
 print("=" * 80)
 print("🔧 AJUSTANDO DATOS PARA CONSISTENCIA")
@@ -69,7 +70,7 @@ for idx, row in generated_events.iterrows():
     impacts_df.at[idx, 'roi_ratio'] = round(np.random.uniform(3.8, 5.2), 2)
 
 # Guardar
-output_path = data_dir / "event_impacts.csv"
+output_path = DATA_DIR / "event_impacts.csv"
 impacts_df.to_csv(output_path, index=False)
 
 print(f"✅ Datos ajustados y guardados")

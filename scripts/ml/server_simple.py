@@ -7,7 +7,10 @@ Uso: python server_simple.py
 Luego abre: http://localhost:8000
 """
 import sys
-sys.path.insert(0, 'backend')
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BASE_DIR / "backend"))
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware

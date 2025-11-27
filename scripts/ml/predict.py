@@ -4,7 +4,10 @@ Evently - Predictor Interactivo de Impacto Económico
 Uso: python predict.py
 """
 import sys
-sys.path.insert(0, 'backend')
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BASE_DIR / "backend"))
 from app.ml.economic_impact_model import EconomicImpactModel
 
 def main():

@@ -2,10 +2,10 @@
 Script para entrenar el modelo y mostrar todas las métricas relevantes
 """
 import sys
-import os
+from pathlib import Path
 
-# Añadir el directorio backend al path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'backend'))
+BASE_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(BASE_DIR / "backend"))
 
 from app.ml.economic_impact_model import EconomicImpactModel
 import json

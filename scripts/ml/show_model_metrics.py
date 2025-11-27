@@ -7,7 +7,8 @@ import pickle
 import sys
 from pathlib import Path
 
-model_path = Path("backend/app/ml/saved_models/economic_impact_model.pkl")
+BASE_DIR = Path(__file__).resolve().parents[1]
+model_path = BASE_DIR / "backend" / "app" / "ml" / "saved_models" / "economic_impact_model.pkl"
 
 if not model_path.exists():
     print("❌ No se encontró modelo guardado.")

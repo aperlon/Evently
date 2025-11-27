@@ -8,13 +8,14 @@ from pathlib import Path
 from datetime import datetime, timedelta
 
 # Cargar datos
-data_dir = Path("data/examples")
-events_df = pd.read_csv(data_dir / "events.csv")
-impacts_df = pd.read_csv(data_dir / "event_impacts.csv")
-cities_df = pd.read_csv(data_dir / "cities.csv")
-tourism_df = pd.read_csv(data_dir / "tourism_metrics.csv")
-hotel_df = pd.read_csv(data_dir / "hotel_metrics.csv")
-economic_df = pd.read_csv(data_dir / "economic_metrics.csv")
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data" / "examples"
+events_df = pd.read_csv(DATA_DIR / "events.csv")
+impacts_df = pd.read_csv(DATA_DIR / "event_impacts.csv")
+cities_df = pd.read_csv(DATA_DIR / "cities.csv")
+tourism_df = pd.read_csv(DATA_DIR / "tourism_metrics.csv")
+hotel_df = pd.read_csv(DATA_DIR / "hotel_metrics.csv")
+economic_df = pd.read_csv(DATA_DIR / "economic_metrics.csv")
 
 # Convertir fechas
 events_df['start_date'] = pd.to_datetime(events_df['start_date'])
@@ -167,7 +168,7 @@ new_impacts_df = pd.DataFrame(new_impacts)
 combined_impacts = pd.concat([impacts_df, new_impacts_df], ignore_index=True)
 
 # Guardar
-output_path = data_dir / "event_impacts.csv"
+output_path = DATA_DIR / "event_impacts.csv"
 combined_impacts.to_csv(output_path, index=False)
 
 print(f"💾 Guardado en: {output_path}")
